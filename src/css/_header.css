@@ -1,0 +1,13 @@
+.header {
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.header .header_logo_block {
+  display: block;
+  height: 36px;
+  line-height: 36px;
+}
+
+.header .header_logo_block img {
+}
