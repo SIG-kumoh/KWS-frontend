@@ -1,21 +1,19 @@
-import '../../css/_sidebar.css'
+import './sidebar.css'
+import React, {useContext} from "react";
+import {SidebarContext} from "../../context/SidebarContext";
+import {sidebarPanel} from "../../config/Config";
+import {Link} from "react-router-dom";
 
 export default function Sidebar() {
+    const {selected, setSelected} = useContext(SidebarContext);
     return (
         <div className="sidebar">
             <ul className="sidebar_menu">
-                <li className="sidebar_panel">
-                    <a>서버 현황</a>
-                </li>
-                <li className="sidebar_panel">
-                    <a>서버 대여</a>
-                </li>
-                <li className="sidebar_panel">
-                    <a>서버 연장</a>
-                </li>
-                <li className="sidebar_panel">
-                    <a>서버 반납</a>
-                </li>
+                {sidebarPanel.map((panel, index) => (
+                    <li key={index} className={`sidebar_panel ${selected === index ? 'selected' : ''}`}>
+                        <Link to={panel.path} onClick={() => setSelected(index)}>{panel.name}</Link>
+                    </li>
+                ))}
             </ul>
         </div>
     )

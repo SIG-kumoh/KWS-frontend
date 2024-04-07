@@ -6,3 +6,7 @@
     text-align: center;
     padding: 1.2em 1.2em;
 }
+
+.sidebar .sidebar_menu .selected {
+    font-weight: bold;
+}
