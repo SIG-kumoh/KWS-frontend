@@ -6,6 +6,9 @@ import {OverViewPage} from "./pages/over_view_page/OverViewPage";
 import Header from "./components/header/Header";
 import Sidebar from "./components/sidebar/Sidebar";
 import {IndexContext} from "./context/SidebarContext";
+import RentalPage from "./pages/rental_page/RentalPage";
+import ExtensionPage from "./pages/extension_page/ExtensionPage";
+import ReturnPage from "./pages/return_page/ReturnPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -21,10 +24,9 @@ root.render(
                 <div className="main_content">
                   <Routes>
                       <Route path="/" element={<OverViewPage />}/>
-                      {/* 페이지 수정 필요 */}
-                      <Route path="/rental" element={<OverViewPage />}/>
-                      <Route path="/extension" element={<OverViewPage />}/>
-                      <Route path="/return" element={<OverViewPage />}/>
+                      <Route path="/rental" element={<RentalPage />}/>
+                      <Route path="/extension" element={<ExtensionPage />}/>
+                      <Route path="/return" element={<ReturnPage />}/>
                   </Routes>
                 </div>
               </IndexContext>

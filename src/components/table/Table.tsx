@@ -30,7 +30,7 @@ const columnHelper = createColumnHelper<TableData>()
 const columns = [
     columnHelper.accessor('name', {
         cell: info => info.getValue(),
-        header: () => '인스턴스 명'
+        header: () => '인스턴스명'
     }),
 
     columnHelper.accessor('ip', {
