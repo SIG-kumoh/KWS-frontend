@@ -30,7 +30,7 @@ export default function RentalPage() {
             {SubHead("OS 이미지")}
             <h5>Ubuntu</h5>
             {SubHead("Flavor")}
-            <button className="submit_button">대여신청</button>
+            <button className="submit_button">대여 신청</button>
         </div>
     );
 }

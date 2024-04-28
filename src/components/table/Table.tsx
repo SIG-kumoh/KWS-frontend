@@ -1,39 +1,21 @@
 import "./table.css"
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
 import React from "react";
-
-type TableData = {
-    name: string
-    ip: string
-    rental_period: string
-}
-const defaultData: TableData[] = [
-    {
-        name: 'tanner',
-        ip: '192.168.00.00',
-        rental_period: '2000.00.00 ~ 2000.00.00'
-    },
-    {
-        name: 'tandy',
-        ip: '192.168.00.00',
-        rental_period: '2000.00.00 ~ 2000.00.00'
-    },
-    {
-        name: 'joe',
-        ip: '192.168.00.00',
-        rental_period: '2000.00.00 ~ 2000.00.00',
-    },
-]
+import {TableData, TableProps} from "../../config/Config";
 
 const columnHelper = createColumnHelper<TableData>()
 
 const columns = [
     columnHelper.accessor('name', {
         cell: info => info.getValue(),
+        header: () => '이름'
+    }),
+    columnHelper.accessor('server_name', {
+        cell: info => info.getValue(),
         header: () => '인스턴스명'
     }),
 
-    columnHelper.accessor('ip', {
+    columnHelper.accessor('host_ip', {
         cell: info => <>{info.getValue()}</>,
         header: () => 'IP'
     }),
@@ -42,8 +24,8 @@ const columns = [
         cell: info => info.renderValue()
     }),
 ]
-export function Table() {
-    const [data, _setData] = React.useState(() => [...defaultData])
+export function Table(props: TableProps) {
+    const [data, _setData] = React.useState(() => [...props.data])
 
     const table = useReactTable({
         data,

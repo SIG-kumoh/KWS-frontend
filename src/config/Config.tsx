@@ -13,3 +13,16 @@ export interface InputBoxProps {
     placeholder: string;
     change: (value:string) => void;
 }
+
+export interface TableData {
+    name: string;
+    server_name: string;
+    host_ip: string;
+    rental_period: string;
+}
+
+export const SERVER_URL = "http://localhost:8080";
+
+export interface TableProps {
+    data: TableData[];
+}
