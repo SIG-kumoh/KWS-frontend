@@ -28,7 +28,9 @@ export default function RentalPage() {
             {InputBox(pwInputBoxProps)}
             {SubHead("대여 기간")}
             {SubHead("OS 이미지")}
+            <h5>Ubuntu</h5>
             {SubHead("Flavor")}
+            <button className="submit_button">대여신청</button>
         </div>
     );
 }

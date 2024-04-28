@@ -10,17 +10,17 @@ type TableData = {
 const defaultData: TableData[] = [
     {
         name: 'tanner',
-        ip: '192.168....',
+        ip: '192.168.00.00',
         rental_period: '2000.00.00 ~ 2000.00.00'
     },
     {
         name: 'tandy',
-        ip: '192.168....',
+        ip: '192.168.00.00',
         rental_period: '2000.00.00 ~ 2000.00.00'
     },
     {
         name: 'joe',
-        ip: '192.168....',
+        ip: '192.168.00.00',
         rental_period: '2000.00.00 ~ 2000.00.00',
     },
 ]

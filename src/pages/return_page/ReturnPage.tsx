@@ -26,6 +26,7 @@ export default function ReturnPage() {
             {InputBox(nameInputBoxProps)}
             {SubHead("비밀번호")}
             {InputBox(pwInputBoxProps)}
+            <button className="submit_button">반납신청</button>
         </div>
     );
 }

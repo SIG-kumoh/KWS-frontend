@@ -27,6 +27,7 @@ export default function ExtensionPage() {
             {SubHead("비밀번호")}
             {InputBox(pwInputBoxProps)}
             {SubHead("연장 기간")}
+            <button className="submit_button">연장신청</button>
         </div>
     );
 }
