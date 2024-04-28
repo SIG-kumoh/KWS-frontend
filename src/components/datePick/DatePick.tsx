@@ -11,6 +11,7 @@ export default function DatePick(props: DatePickProps) {
             <DatePicker
                 selected={props.date}
                 onChange={props.change}
+                minDate={new Date()}
             />
         </div>
     )

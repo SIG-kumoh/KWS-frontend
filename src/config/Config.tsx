@@ -32,10 +32,13 @@ export interface DatePickProps {
 }
 
 export interface SelectTableProps {
-    item: SelectTableItem[];
-    change: (value:string) => void;
+    rows: SelectTableItem[];
+    change: (value:number) => void;
 }
 
 export interface SelectTableItem {
-    value: string;
+    name: string;
+    cpu: number;
+    ram: number;
+    disk: number;
 }

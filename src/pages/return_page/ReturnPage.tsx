@@ -27,8 +27,8 @@ export default function ReturnPage() {
     const ipInputBoxProps:InputBoxProps = {type:"text", placeholder:"IP를 입력하시오",
         value:ip, change: ipChange}
 
-    const returnMutation = async () => {
-        const response = await fetch(url, {
+    const returnServer = async () => {
+        fetch(url, {
             method: 'DELETE',
             body: JSON.stringify({server_name: name, host_ip: ip, password: password}),
             headers: {
@@ -40,7 +40,7 @@ export default function ReturnPage() {
 
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
-        returnMutation()
+        returnServer()
     }
 
     return (
