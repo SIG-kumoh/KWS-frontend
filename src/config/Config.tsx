@@ -13,3 +13,17 @@ export interface InputBoxProps {
     placeholder: string;
     change: (value:string) => void;
 }
+
+export interface DatePickProps {
+    date: Date;
+    change: (value:Date) => void;
+}
+
+export interface SelectTableProps {
+    item: SelectTableItem[];
+    change: (value:string) => void;
+}
+
+export interface SelectTableItem {
+    value: string;
+}

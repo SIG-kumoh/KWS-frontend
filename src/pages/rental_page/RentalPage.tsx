@@ -1,9 +1,11 @@
 import PageHeader from "../../components/header/PageHeader";
 import {useContext, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
-import {InputBoxProps, sidebarPanel} from "../../config/Config";
+import {DatePickProps, InputBoxProps, sidebarPanel} from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
+import DatePick from "../../components/datePick/DatePick";
+
 
 export default function RentalPage() {
     const {selected} = useContext(SidebarContext);
@@ -19,6 +21,14 @@ export default function RentalPage() {
         value:name, change: nameChange}
     const pwInputBoxProps:InputBoxProps = {type:"password", placeholder:"비밀번호를 입력하시오",
         value:password, change: pwChange}
+
+    const [startDate, setStartDate] = useState<Date>(new Date());
+    const [endDate, setEndDate] = useState<Date>(new Date());
+    const startDateChange = (value: Date) => {setStartDate(value)}
+    const endDateChange = (value: Date) => {setEndDate(value)}
+    const startDatePickProps:DatePickProps = {date: startDate, change: startDateChange}
+    const endDatePickProps:DatePickProps = {date: endDate, change: endDateChange}
+
     return (
         <div>
             {PageHeader(sidebarPanel[selected].name)}
@@ -27,6 +37,8 @@ export default function RentalPage() {
             {SubHead("비밀번호")}
             {InputBox(pwInputBoxProps)}
             {SubHead("대여 기간")}
+            {DatePick(startDatePickProps)}
+            {DatePick(endDatePickProps)}
             {SubHead("OS 이미지")}
             <h5>Ubuntu</h5>
             {SubHead("Flavor")}
