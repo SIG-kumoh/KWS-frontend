@@ -21,7 +21,7 @@ export interface TableData {
     rental_period: string;
 }
 
-export const SERVER_URL = "http://localhost:8080";
+export const SERVER_URL = "http://localhost:8000";
 
 export interface TableProps {
     data: TableData[];

@@ -45,28 +45,32 @@ export default function RentalPage() {
 
     const [flavor, setFlavor] = useState<number>(0);
     const flavorChange = (value: number) => {setFlavor(value)}
-    //TODO 서버에서 받아온 데이터로 구성하게 바꿔야함
+    //TODO flavor_list라는 경로로 받아올 수 있게 수정하였음
+    //TODO 추가적으로, image_list라는 API 추가하여 이미지 이름들 받아올 수 있게 하였음
+    //TODO 비밀번호를 설정할 것인지, 키페어를 이용할 것인지를 사용자가 선택할 수 있어야 함
     const testData: SelectTableItem[] = [
-        {name:"ae", cpu:1, ram:1, disk:1},
+        {name:"m1.nano", cpu:1, ram:128, disk:1},
         {name:"a123e", cpu:2, ram:3, disk:4},
         {name:"aeee", cpu:1165, ram:12, disk:1222},
         {name:"aaae", cpu:154, ram:51, disk:11}
     ]
     const selectTableProps: SelectTableProps = {rows:testData, change: flavorChange}
-    const url:string = SERVER_URL + "/rental"
-    //TODO body image, network 추후에 논의해야함, 요청결과에 따른 반응 수정 필요
+    const url:string = SERVER_URL + "/openstack/rental"
+    //TODO 요청결과에 따른 반응 수정 필요
+    //testData[flavor].name
     const rentalServer = async () => {
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
-                user_name   : name,
-                server_name : serverName,
-                start_date  : startDate,
-                end_date    : endDate,
-                image       : "ubuntu",
-                flavor      : testData[flavor].name,
-                network     : "private",
-                password    : password
+                user_name    : name,
+                server_name  : serverName,
+                start_date   : startDate.toISOString().split("T")[0],
+                end_date     : endDate.toISOString().split("T")[0],
+                image_name   : "cirros-0.6.2-x86_64-disk",
+                flavor_name  : "m1.nano",
+                network_name : "shared",
+                password     : password,
+                cloud_init   : ""
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -93,7 +97,7 @@ export default function RentalPage() {
             {DatePick(startDatePickProps)}
             {DatePick(endDatePickProps)}
             {SubHead("OS 이미지")}
-            <h5>Ubuntu</h5>
+            <h5>cirros-0.6.2-x86_64-disk</h5>
             {SubHead("Flavor")}
             {SelectTable(selectTableProps)}
             <button className="submit_button" onClick={(e) => {submit(e)}}>대여 신청</button>

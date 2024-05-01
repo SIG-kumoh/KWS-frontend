@@ -10,7 +10,7 @@ export default function ReturnPage() {
     const [name, setName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [ip, setIp] = useState<string>("")
-    const url = SERVER_URL + "/return"
+    const url = SERVER_URL + "/openstack/return"
     const nameChange = (value:string) => {
         setName(value)
     }
@@ -24,6 +24,8 @@ export default function ReturnPage() {
         value:name, change: nameChange}
     const pwInputBoxProps:InputBoxProps = {type:"password", placeholder:"비밀번호를 입력하시오",
         value:password, change: pwChange}
+    // TODO 비밀번호 뿐만 아니라 키 페어를 이용하여 검증할 수도 있어야 해서
+    // TODO 파일 업로드 후 파일을 서버로 보내주는 로직이 필요함
     const ipInputBoxProps:InputBoxProps = {type:"text", placeholder:"IP를 입력하시오",
         value:ip, change: ipChange}
 

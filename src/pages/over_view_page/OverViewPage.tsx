@@ -12,7 +12,8 @@ export function OverViewPage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [tableData, setTableData] = useState<TableData[]>([])
-    const url = SERVER_URL + "/servers"
+    const url = SERVER_URL //+ "/openstack/servers" //TODO 임시로 URL 주석 처리 makeTableData 정상 동작시킨 후 주석 제거할 것
+    //TODO makeTableData 제대로 동작 안하는거 같음. 서버에서 받아온 데이터가 아닌 테스트 데이터를 직접 만들어봐도 동작 안함
     const makeTableData = (data:any) => {
         data.map((item:any) => {
             setTableData((prev:TableData[]) => [...prev, {
@@ -30,6 +31,7 @@ export function OverViewPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
+            console.log(result)
             makeTableData(result)
             setIsLoading(false)
         }).catch((error) => {

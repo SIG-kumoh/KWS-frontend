@@ -24,6 +24,8 @@ export default function ExtensionPage() {
         value:serverName, change: nameChange}
     const pwInputBoxProps:InputBoxProps = {type:"password", placeholder:"비밀번호를 입력하시오",
         value:password, change: pwChange}
+    // TODO 비밀번호 뿐만 아니라 키 페어를 이용하여 검증할 수도 있어야 해서
+    // TODO 파일 업로드 후 파일을 서버로 보내주는 로직이 필요함
     const ipInputBoxProps:InputBoxProps = {type:"text", placeholder:"IP를 입력하시오",
         value:ip, change: ipChange}
 
@@ -34,7 +36,7 @@ export default function ExtensionPage() {
 
 
     // TODO
-    const url:string = SERVER_URL + "/extension"
+    const url:string = SERVER_URL + "/openstack/extension"
     const extensionServer = async () => {
         fetch(url, {
             method: 'PUT',
@@ -42,7 +44,7 @@ export default function ExtensionPage() {
                 server_name     : serverName,
                 host_ip         : ip,
                 password        : password,
-                end_date        : endDate
+                end_date        : endDate.toISOString().split("T")[0]
             }),
             headers: {
                 'Content-Type': 'application/json'
