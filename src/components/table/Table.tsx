@@ -1,6 +1,6 @@
 import "./table.css"
 import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
-import React from "react";
+import React, {useEffect} from "react";
 import {TableData, TableProps} from "../../config/Config";
 
 const columnHelper = createColumnHelper<TableData>()
@@ -26,6 +26,9 @@ const columns = [
 ]
 export function Table(props: TableProps) {
     const [data, _setData] = React.useState(() => [...props.data])
+    useEffect(() => {
+        _setData([...props.data])
+    }, [props.data]);
 
     const table = useReactTable({
         data,
