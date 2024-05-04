@@ -3,7 +3,7 @@ import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
 import {
     DatePickProps,
-    InputBoxProps,
+    InputBoxProps, RadioListItem, RadioListProps,
     SelectTableItem,
     SelectTableProps,
     SERVER_URL,
@@ -14,6 +14,9 @@ import InputBox from "../../components/InputBox/InputBox";
 import DatePick from "../../components/datePick/DatePick";
 import SelectTable from "../../components/selectTable/SelectTable";
 import Loading from "../../components/loading/Loading";
+import RadioList from "../../components/radioList/RadioList";
+import {Simulate} from "react-dom/test-utils";
+import input = Simulate.input;
 
 
 export default function RentalPage() {
@@ -37,6 +40,9 @@ export default function RentalPage() {
     const pwInputBoxProps:InputBoxProps = {type:"password", placeholder:"비밀번호를 입력하시오",
         value:password, change: pwChange}
 
+    //TODO 비밀번호를 설정할 것인지, 키페어를 이용할 것인지를 사용자가 선택할 수 있어야 함
+    const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
+
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
     const startDateChange = (value: Date) => {setStartDate(value)}
@@ -44,14 +50,40 @@ export default function RentalPage() {
     const startDatePickProps:DatePickProps = {date: startDate, change: startDateChange}
     const endDatePickProps:DatePickProps = {date: endDate, change: endDateChange}
 
+    // set image radio list
+    const [image, setImage] = useState<string>('');
+    const imageUrl = SERVER_URL + "/openstack/image_list";
+    const [imageLoading, setImageLoading] = useState<boolean>(true);
+    const [imageLoadError, setImageLoadError] = useState<boolean>(false);
+    const [imageData, setImageData] = useState<RadioListItem[]>([])
+    const makeImageData = (data: any) => {
+        setImageData([]);
+        data.map((item: any) => {
+            setImageData((prev:RadioListItem[]) => [...prev,{
+                value: item.name
+            }]);
+        });
+    };
+    useEffect(() => {
+         fetch(imageUrl, {
+             method: 'GET'
+         }).then(res => res.json()).then((result) => {
+             makeImageData(result);
+             setImageLoading(false);
+         }).catch((error) => {
+             setImageLoadError(true);
+         })
+    }, []);
+    const radioListProps: RadioListProps = {name: 'image', items: imageData, change: setImage}
+
+    // set flavor select table
     const [flavor, setFlavor] = useState<number>(0);
     const flavorChange = (value: number) => {setFlavor(value)}
-
     const flavorUrl = SERVER_URL + "/openstack/flavor_list";
     const [flavorLoading, setFlavorLoading] = useState<boolean>(true);
     const [flavorLoadError, setFlavorLoadError] = useState<boolean>(false);
     const [flavorData, setFlavorData] = useState<SelectTableItem[]>([])
-    const makeTableData = (data:any) => {
+    const makeFlavorTableData = (data:any) => {
         setFlavorData([]);
         data.map((item:any) => {
             setFlavorData((prev:SelectTableItem[]) => [...prev, {
@@ -64,23 +96,18 @@ export default function RentalPage() {
     };
     useEffect(() => {
         fetch(flavorUrl, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'GET'
         }).then(res => res.json()).then((result) => {
-            makeTableData(result);
+            makeFlavorTableData(result);
             setFlavorLoading(false);
         }).catch((error) => {
             setFlavorLoadError(true);
         });
     }, []);
-    //TODO 추가적으로, image_list라는 API 추가하여 이미지 이름들 받아올 수 있게 하였음
-    //TODO 비밀번호를 설정할 것인지, 키페어를 이용할 것인지를 사용자가 선택할 수 있어야 함
     const selectTableProps: SelectTableProps = {rows:flavorData, change: flavorChange}
+
+    // rental request
     const url:string = SERVER_URL + "/openstack/rental"
-    //TODO 요청결과에 따른 반응 수정 필요
-    //testData[flavor].name
     const rentalServer = async () => {
         fetch(url, {
             method: 'POST',
@@ -89,10 +116,10 @@ export default function RentalPage() {
                 server_name  : serverName,
                 start_date   : startDate.toISOString().split("T")[0],
                 end_date     : endDate.toISOString().split("T")[0],
-                image_name   : "cirros-0.6.2-x86_64-disk",
+                image_name   : image,
                 flavor_name  : flavorData[flavor].name,
                 network_name : "shared",
-                password     : password,
+                password     : useKeyPair ? "" : password,
                 cloud_init   : ""
             }),
             headers: {
@@ -112,19 +139,29 @@ export default function RentalPage() {
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("사용자명")}
             {InputBox(nameInputBoxProps)}
+
             {SubHead("인스턴스명")}
             {InputBox(serverNameInputBoxProps)}
+
             {SubHead("비밀번호")}
-            {InputBox(pwInputBoxProps)}
+            <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)}></input>
+            키 페어 방식 사용
+            {useKeyPair ? null : InputBox(pwInputBoxProps)}
+
             {SubHead("대여 기간")}
             {DatePick(startDatePickProps)}
             {DatePick(endDatePickProps)}
+
             {SubHead("OS 이미지")}
-            <h5>cirros-0.6.2-x86_64-disk</h5>
+            {RadioList(radioListProps)}
+            {imageLoadError ? SubHead("서버로부터 응답이 없습니다.") :
+                imageLoading ? <Loading/> : null}
+
             {SubHead("Flavor")}
             {SelectTable(selectTableProps)}
             {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
                 flavorLoading ? <Loading/> : null}
+
             <button className="submit_button" onClick={(e) => {submit(e)}}>대여 신청</button>
         </div>
     );
