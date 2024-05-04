@@ -42,3 +42,13 @@ export interface SelectTableItem {
     ram: number;
     disk: number;
 }
+
+export interface RadioListProps {
+    name: string;
+    items: RadioListItem[];
+    change: (value:string) => void;
+}
+
+export interface RadioListItem {
+    value: string;
+}
