@@ -13,17 +13,17 @@ export default function ReturnPage() {
     const [keyFile, setKeyFile] = useState<File>(new File([], ''));
     const [ip, setIp] = useState<string>("")
     const url = SERVER_URL + "/openstack/return"
-    const nameChange = (value:string) => {
-        setName(value)
+    const nameChange = (target:any) => {
+        setName(target.value)
     }
-    const pwChange = (value:string) => {
-        setPassword(value)
+    const pwChange = (target:any) => {
+        setPassword(target.value)
     }
-    const ipChange = (value:string) => {
-        setIp(value)
+    const ipChange = (target:any) => {
+        setIp(target.value)
     }
-    const handleFileChange = (event: any) => {
-        setKeyFile(event.target.files[0]);
+    const handleFileChange = (target:any) => {
+        setKeyFile(target.files[0]);
     }
     const nameInputBoxProps:InputBoxProps = {type:"text", placeholder:"인스턴스명을 입력하시오",
         value:name, change: nameChange}

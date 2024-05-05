@@ -13,17 +13,17 @@ export default function ExtensionPage() {
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
     const [keyFile, setKeyFile] = useState<File>(new File([], ''));
     const [ip, setIp] = useState<string>("")
-    const nameChange = (value:string) => {
-        setServerName(value)
+    const nameChange = (target:any) => {
+        setServerName(target.value)
     }
-    const pwChange = (value:string) => {
-        setPassword(value)
+    const pwChange = (target:any) => {
+        setPassword(target.value)
     }
-    const ipChange = (value:string) => {
-        setIp(value)
+    const ipChange = (target:any) => {
+        setIp(target.value)
     }
-    const handleFileChange = (event: any) => {
-        setKeyFile(event.target.files[0]);
+    const handleFileChange = (target: any) => {
+        setKeyFile(target.files[0]);
     }
 
 

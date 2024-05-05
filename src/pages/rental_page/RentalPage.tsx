@@ -134,8 +134,6 @@ export default function RentalPage() {
         }).catch((error) => {
             console.log(error)
         });
-        // }).then(res => res).then(res => res.ok ? alert("대여신청 완") : alert("대여신청 실"))
-        //     .catch((error) => {console.error('Error:', error)})
     }
 
 
