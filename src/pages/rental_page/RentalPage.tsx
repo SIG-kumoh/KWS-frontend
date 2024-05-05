@@ -24,14 +24,14 @@ export default function RentalPage() {
     const [name, setName] = useState<string>("")
     const [serverName, setServerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
-    const nameChange = (value:string) => {
-        setName(value)
+    const nameChange = (target:any) => {
+        setName(target.value)
     }
-    const serverNameChange = (value:string) => {
-        setServerName(value)
+    const serverNameChange = (target:any) => {
+        setServerName(target.value)
     }
-    const pwChange = (value:string) => {
-        setPassword(value)
+    const pwChange = (target:any) => {
+        setPassword(target.value)
     }
     const nameInputBoxProps: InputBoxProps = {type:"text", placeholder:"사용자명을 입력하시오",
         value:name, change: nameChange}
