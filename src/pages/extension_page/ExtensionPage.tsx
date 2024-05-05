@@ -10,6 +10,8 @@ export default function ExtensionPage() {
     const {selected} = useContext(SidebarContext);
     const [serverName, setServerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
+    const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
+    const [keyFile, setKeyFile] = useState<File>(new File([], ''));
     const [ip, setIp] = useState<string>("")
     const nameChange = (value:string) => {
         setServerName(value)
@@ -20,12 +22,15 @@ export default function ExtensionPage() {
     const ipChange = (value:string) => {
         setIp(value)
     }
+    const handleFileChange = (event: any) => {
+        setKeyFile(event.target.files[0]);
+    }
 
 
     const serverNameInputBoxProps:InputBoxProps = {type:"text", placeholder:"인스턴스명을 입력하시오",
         value:serverName, change: nameChange}
-    const pwInputBoxProps:InputBoxProps = {type: "password", placeholder:"비밀번호를 입력하시오",
-        value:password, change: pwChange}
+    const pwInputBoxProps:InputBoxProps = {type: useKeyPair ? "file" : "password", placeholder:"비밀번호를 입력하시오",
+        value:password, change: useKeyPair ? handleFileChange : pwChange}
     const ipInputBoxProps:InputBoxProps = {type:"text", placeholder:"IP를 입력하시오",
         value:ip, change: ipChange}
 
@@ -48,21 +53,13 @@ export default function ExtensionPage() {
         fetch(url, {
             method: 'PUT',
             body: formData
-        }).then(res => res).then(res => res.ok ? alert("연장신청 완") : alert("연장신청 실"))
+        }).then(res => res).then(res => res.ok ? alert("연장 완료") : alert("연장 실패"))
             .catch((error) => {console.error('Error:', error)})
     }
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         extensionServer();
     }
-
-
-    // TODO keyPair 사용 - 나중에 지울거임
-    const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
-    const [keyFile, setKeyFile] = useState<File>(new File([], ''));
-    const handleFileChange = (event: any) => {
-        setKeyFile(event.target.files[0]);
-    };
 
     return (
         <div>
@@ -74,13 +71,8 @@ export default function ExtensionPage() {
             {InputBox(ipInputBoxProps)}
 
             {SubHead("비밀번호")}
-            {/*TODO inputbox가 규격화 되어있어서 일단 이렇게 작성했어*/}
             <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용
-            {useKeyPair ?
-                <div className="input_box">
-                    <input type="file" placeholder="키 파일을 선택하시오" onChange={handleFileChange}/>
-                </div>
-                : InputBox(pwInputBoxProps)}
+            {InputBox(pwInputBoxProps)}
 
             {SubHead("연장 기간")}
             {DatePick(endDatePickProps)}

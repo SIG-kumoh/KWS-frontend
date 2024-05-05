@@ -21,7 +21,7 @@ export function OverViewPage() {
                 name: item.user_name,
                 server_name: item.server_name,
                 host_ip: item.floating_ip,
-                rental_period: item.start_date + " ~ " + item.end_date
+                rental_period: item.start_date.split("T")[0] + " ~ " + item.end_date.split("T")[0]
             }]);
         });
     };
@@ -43,8 +43,9 @@ export function OverViewPage() {
     return (
         <div>
             {PageHeader(sidebarPanel[selected].name)}
+            {SubHead("요약")}
             {isError ? SubHead("서버로부터 응답이 없습니다.") :
-                isLoading ? <Loading/> : SubHead("요약")}
+                isLoading ? <Loading/> : <></>}
             {!(isError || isLoading) ? SubHead("대여 현황") : null}
             {Table({data: tableData})}
         </div>

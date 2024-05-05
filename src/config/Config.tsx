@@ -11,7 +11,7 @@ export interface InputBoxProps {
     type: string;
     value: string;
     placeholder: string;
-    change: (value:string) => void;
+    change: (value:any) => void;
 }
 
 export interface TableData {
@@ -21,7 +21,7 @@ export interface TableData {
     rental_period: string;
 }
 
-export const SERVER_URL = "http://localhost:8000";
+export const SERVER_URL = "http://122.46.233.235:58080";
 
 export interface TableProps {
     data: TableData[];

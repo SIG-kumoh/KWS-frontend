@@ -40,7 +40,6 @@ export default function RentalPage() {
     const pwInputBoxProps:InputBoxProps = {type:"password", placeholder:"비밀번호를 입력하시오",
         value:password, change: pwChange}
 
-    //TODO 비밀번호를 설정할 것인지, 키페어를 이용할 것인지를 사용자가 선택할 수 있어야 함
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
 
     const [startDate, setStartDate] = useState<Date>(new Date());
@@ -125,9 +124,20 @@ export default function RentalPage() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res).then(res => res.ok ? alert("대여신청 완") : alert("대여신청 실"))
-            .catch((error) => {console.error('Error:', error)})
+        }).then(res => res.json()).then(({name, data}) => {
+            if(useKeyPair) {
+                const blob = new Blob([data], {type: 'plain/text'});
+                const file = new File([blob], name, {type: 'plain/text'});
+                downloadFile(file);
+            }
+            alert("대여 완료")
+        }).catch((error) => {
+            console.log(error)
+        });
+        // }).then(res => res).then(res => res.ok ? alert("대여신청 완") : alert("대여신청 실"))
+        //     .catch((error) => {console.error('Error:', error)})
     }
+
 
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
@@ -165,4 +175,18 @@ export default function RentalPage() {
             <button className="submit_button" onClick={(e) => {submit(e)}}>대여 신청</button>
         </div>
     );
+}
+
+
+function downloadFile(file: File) {
+    const url = window.URL.createObjectURL(file);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = file.name;
+
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
 }
