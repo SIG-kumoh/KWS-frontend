@@ -8,7 +8,14 @@ import {useNavigate} from "react-router-dom";
 export function Table(props: TableProps) {
     const [data, _setData] = React.useState(() => [...props.data])
     const columnHelper = createColumnHelper<TableData>()
-
+    const handleCopyClipBoard = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            alert("클립보드에 링크가 복사되었어요.");
+        } catch (err) {
+            console.log(err);
+        }
+    };
     const navigate = useNavigate()
     const columns = [
         columnHelper.accessor('name', {
@@ -27,6 +34,10 @@ export function Table(props: TableProps) {
         columnHelper.accessor('rental_period', {
             header: () => '대여 기간',
             cell: info => info.renderValue()
+        }),
+        columnHelper.accessor('server_data', {
+            header: () => '복사',
+            cell: info => <button onClick={() => handleCopyClipBoard(`${info.getValue().server_name}@${info.getValue().host_ip}`)}>복사</button>
         }),
         columnHelper.accessor('server_data', {
             header: () => '연장',
