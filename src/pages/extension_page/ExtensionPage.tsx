@@ -5,9 +5,15 @@ import {DatePickProps, InputBoxProps, SERVER_URL, sidebarPanel} from "../../conf
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
 import DatePick from "../../components/datePick/DatePick";
+import {useLocation} from "react-router-dom";
 
 export default function ExtensionPage() {
-    const {selected} = useContext(SidebarContext);
+    const {state} = useLocation()
+    const {selected, setSelected} = useContext(SidebarContext);
+    const hasInfo:boolean = state != undefined
+    if(state != undefined) {
+        setSelected(2)
+    }
     const [serverName, setServerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
@@ -25,8 +31,6 @@ export default function ExtensionPage() {
     const handleFileChange = (target: any) => {
         setKeyFile(target.files[0]);
     }
-
-
     const serverNameInputBoxProps:InputBoxProps = {type:"text", placeholder:"인스턴스명을 입력하시오",
         value:serverName, change: nameChange}
     const pwInputBoxProps:InputBoxProps = {type: useKeyPair ? "file" : "password", placeholder:"비밀번호를 입력하시오",
@@ -44,12 +48,16 @@ export default function ExtensionPage() {
     const url:string = SERVER_URL + "/openstack/extension"
     const extensionServer = async () => {
         const formData = new FormData()
-        formData.append('server_name', serverName);
-        formData.append('host_ip', ip);
+        if(hasInfo) {
+            formData.append('server_name', state.server_name);
+            formData.append('host_ip', state.host_ip);
+        } else {
+            formData.append('server_name', serverName);
+            formData.append('host_ip', ip);
+        }
         formData.append('password', (useKeyPair ? '' : password));
         formData.append('end_date', endDate.toISOString().split("T")[0])
         if (useKeyPair) formData.append('key_file', keyFile);
-
         fetch(url, {
             method: 'PUT',
             body: formData
@@ -65,10 +73,10 @@ export default function ExtensionPage() {
         <div>
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("인스턴스명")}
-            {InputBox(serverNameInputBoxProps)}
+            {hasInfo ? SubHead(state.server_name) : InputBox(serverNameInputBoxProps)}
 
             {SubHead("IP")}
-            {InputBox(ipInputBoxProps)}
+            {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
 
             {SubHead("비밀번호")}
             <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용

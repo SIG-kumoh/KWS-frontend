@@ -4,9 +4,15 @@ import PageHeader from "../../components/header/PageHeader";
 import {InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
+import {useLocation} from "react-router-dom";
 
 export default function ReturnPage() {
-    const {selected} = useContext(SidebarContext);
+    const {state} = useLocation()
+    const {selected, setSelected} = useContext(SidebarContext);
+    const hasInfo:boolean = state != undefined
+    if(state != undefined) {
+        setSelected(3)
+    }
     const [name, setName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
@@ -34,8 +40,13 @@ export default function ReturnPage() {
 
     const returnServer = async () => {
         const formData = new FormData()
-        formData.append('server_name', name);
-        formData.append('host_ip', ip);
+        if(hasInfo) {
+            formData.append('server_name', state.server_name);
+            formData.append('host_ip', state.host_ip);
+        } else {
+            formData.append('server_name', name);
+            formData.append('host_ip', ip);
+        }
         formData.append('password', (useKeyPair ? '' : password));
         if (useKeyPair) formData.append('key_file', keyFile);
 
@@ -55,10 +66,10 @@ export default function ReturnPage() {
         <div>
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("인스턴스명")}
-            {InputBox(nameInputBoxProps)}
+            {hasInfo ? SubHead(state.server_name) : InputBox(nameInputBoxProps)}
 
             {SubHead("IP")}
-            {InputBox(ipInputBoxProps)}
+            {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
 
             {SubHead("비밀번호")}
             <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용

@@ -21,7 +21,8 @@ export function OverViewPage() {
                 name: item.user_name,
                 server_name: item.server_name,
                 host_ip: item.floating_ip,
-                rental_period: item.start_date.split("T")[0] + " ~ " + item.end_date.split("T")[0]
+                rental_period: item.start_date.split("T")[0] + " ~ " + item.end_date.split("T")[0],
+                server_data: {server_name: item.server_name, host_ip: item.floating_ip}
             }]);
         });
     };

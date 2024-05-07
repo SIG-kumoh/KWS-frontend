@@ -14,11 +14,17 @@ export interface InputBoxProps {
     change: (value:any) => void;
 }
 
+export interface serverData {
+    server_name: string;
+    host_ip: string;
+}
+
 export interface TableData {
     name: string;
     server_name: string;
     host_ip: string;
     rental_period: string;
+    server_data: serverData;
 }
 
 export const SERVER_URL = "http://122.46.233.235:58080";

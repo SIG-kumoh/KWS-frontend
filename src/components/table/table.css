@@ -15,3 +15,10 @@ td {
     padding: 4px 10px;
     text-align: center;
 }
+.table_container button {
+    background-color: #cccccc;
+    border: none;
+    color: black;
+    font-size: 1rem;
+    margin: 0;
+}
