@@ -45,7 +45,7 @@ export default function ExtensionPage() {
 
 
     // TODO
-    const url:string = SERVER_URL + "/openstack/extension"
+    const url:string = SERVER_URL + "/db/extension"
     const extensionServer = async () => {
         const formData = new FormData()
         if(hasInfo) {

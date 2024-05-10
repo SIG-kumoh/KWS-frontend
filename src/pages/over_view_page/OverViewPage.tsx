@@ -13,7 +13,7 @@ export function OverViewPage() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
     const [tableData, setTableData] = useState<TableData[]>([])
-    const url = SERVER_URL + "/openstack/servers";
+    const url = SERVER_URL + "/db/servers";
     const makeTableData = (data:any) => {
         setTableData([]);
         data.map((item:any) => {
@@ -33,7 +33,7 @@ export function OverViewPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
-            makeTableData(result);
+            makeTableData(result.data);
             setIsLoading(false);
         }).catch((error) => {
             setIsError(true);

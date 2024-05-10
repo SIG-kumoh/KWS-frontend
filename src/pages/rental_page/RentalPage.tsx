@@ -67,7 +67,7 @@ export default function RentalPage() {
          fetch(imageUrl, {
              method: 'GET'
          }).then(res => res.json()).then((result) => {
-             makeImageData(result);
+             makeImageData(result.data);
              setImageLoading(false);
          }).catch((error) => {
              setImageLoadError(true);
@@ -97,7 +97,7 @@ export default function RentalPage() {
         fetch(flavorUrl, {
             method: 'GET'
         }).then(res => res.json()).then((result) => {
-            makeFlavorTableData(result);
+            makeFlavorTableData(result.data);
             setFlavorLoading(false);
         }).catch((error) => {
             setFlavorLoadError(true);
@@ -119,7 +119,8 @@ export default function RentalPage() {
                 flavor_name  : flavorData[flavor].name,
                 network_name : "shared",
                 password     : useKeyPair ? "" : password,
-                cloud_init   : ""
+                cloud_init   : "",
+                node_name    : "compute_node1"
             }),
             headers: {
                 'Content-Type': 'application/json'
