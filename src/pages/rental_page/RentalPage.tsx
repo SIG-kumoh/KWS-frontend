@@ -120,7 +120,10 @@ export default function RentalPage() {
                 network_name : "shared",
                 password     : useKeyPair ? "" : password,
                 cloud_init   : "",
-                node_name    : "compute_node1"
+                node_name    : "compute_node1",
+                vcpus        : null,
+                ram          : null,
+                disk         : null
             }),
             headers: {
                 'Content-Type': 'application/json'
