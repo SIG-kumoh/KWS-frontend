@@ -33,7 +33,7 @@ export function OverViewPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
-            makeTableData(result.data);
+            makeTableData(result);
             setIsLoading(false);
         }).catch((error) => {
             setIsError(true);

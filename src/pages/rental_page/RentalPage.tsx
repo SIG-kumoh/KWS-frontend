@@ -67,7 +67,7 @@ export default function RentalPage() {
          fetch(imageUrl, {
              method: 'GET'
          }).then(res => res.json()).then((result) => {
-             makeImageData(result.data);
+             makeImageData(result);
              setImageLoading(false);
          }).catch((error) => {
              setImageLoadError(true);
@@ -97,7 +97,7 @@ export default function RentalPage() {
         fetch(flavorUrl, {
             method: 'GET'
         }).then(res => res.json()).then((result) => {
-            makeFlavorTableData(result.data);
+            makeFlavorTableData(result);
             setFlavorLoading(false);
         }).catch((error) => {
             setFlavorLoadError(true);
@@ -128,9 +128,9 @@ export default function RentalPage() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then(({name, data}) => {
+        }).then(res => res.json()).then(({name, private_key}) => {
             if(useKeyPair) {
-                const blob = new Blob([data], {type: 'plain/text'});
+                const blob = new Blob([private_key], {type: 'plain/text'});
                 const file = new File([blob], name, {type: 'plain/text'});
                 downloadFile(file);
             }
