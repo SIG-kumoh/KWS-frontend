@@ -2,7 +2,7 @@ import "./over_view_page.css"
 import PageHeader from "../../components/header/PageHeader";
 import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
-import {SERVER_URL, sidebarPanel, TableData} from "../../config/Config";
+import {PieChartProps, SERVER_URL, sidebarPanel, TableData} from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import {Table} from "../../components/table/Table";
 import Loading from "../../components/loading/Loading";
@@ -112,7 +112,7 @@ interface IProp {
     total: number;
 }
 
-function makePieChartProp(prop: IProp) :PieChartProps {
+function makePieChartProp(prop: IProp) : PieChartProps {
     const labels = ["non-use", "use"];
     const data = prop.numbers;
     return {labels: labels, data: data, title: prop.title, total: prop.total};
