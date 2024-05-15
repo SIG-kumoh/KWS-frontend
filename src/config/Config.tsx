@@ -58,3 +58,10 @@ export interface RadioListProps {
 export interface RadioListItem {
     value: string;
 }
+
+export interface PieChartProps {
+    data: number[];
+    labels: string[];
+    title: string;
+    total: number;
+}
