@@ -27,7 +27,7 @@ export interface TableData {
     server_data: serverData;
 }
 
-export const SERVER_URL = "http://122.46.233.235:58080";
+export const SERVER_URL = "http://192.168.0.215:8000";
 
 export interface TableProps {
     data: TableData[];

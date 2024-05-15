@@ -119,15 +119,18 @@ export default function RentalPage() {
                 flavor_name  : flavorData[flavor].name,
                 network_name : "shared",
                 password     : useKeyPair ? "" : password,
-                cloud_init   : ""
+                cloud_init   : "",
+                node_name    : "compute_node1",
+                vcpus        : null,
+                ram          : null,
+                disk         : null
             }),
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then(({name, data}) => {
-            setIsBtnDisabled(false)
+        }).then(res => res.json()).then(({name, private_key}) => {
             if(useKeyPair) {
-                const blob = new Blob([data], {type: 'plain/text'});
+                const blob = new Blob([private_key], {type: 'plain/text'});
                 const file = new File([blob], name, {type: 'plain/text'});
                 downloadFile(file);
             }

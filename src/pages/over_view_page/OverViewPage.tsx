@@ -2,7 +2,7 @@ import "./over_view_page.css"
 import PageHeader from "../../components/header/PageHeader";
 import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
-import {PieChartProps, SERVER_URL, sidebarPanel, TableData} from "../../config/Config";
+import {SERVER_URL, sidebarPanel, TableData} from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import {Table} from "../../components/table/Table";
 import Loading from "../../components/loading/Loading";
@@ -20,7 +20,7 @@ export function OverViewPage() {
     const [isError, setIsError] = useState<boolean>(false);
     const [tableData, setTableData] = useState<TableData[]>([])
     const [chartData, setChartData] = useState<any>(null)
-    const tableDataUrl = SERVER_URL + "/openstack/servers";
+    const tableDataUrl = SERVER_URL + "/db/servers";
     let usesvcpu = 0;
     let usesram = 0;
     let usesdisk = 0;
