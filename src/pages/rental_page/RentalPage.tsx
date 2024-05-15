@@ -125,6 +125,7 @@ export default function RentalPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then(({name, data}) => {
+            setIsBtnDisabled(false)
             if(useKeyPair) {
                 const blob = new Blob([data], {type: 'plain/text'});
                 const file = new File([blob], name, {type: 'plain/text'});
@@ -141,6 +142,9 @@ export default function RentalPage() {
         e.preventDefault()
         rentalServer()
     }
+
+    //Button disable state
+    const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
     return (
         <div>
@@ -170,7 +174,14 @@ export default function RentalPage() {
             {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
                 flavorLoading ? <Loading/> : null}
 
-            <button className="submit_button" onClick={(e) => {submit(e)}}>대여 신청</button>
+            <button className="submit_button"
+                    disabled={isBtnDisabled}
+                    onClick={(e) => {
+                        setIsBtnDisabled(true)
+                        submit(e)
+                    }}>
+                {isBtnDisabled ? "대여 중" : "대여 신청"}
+            </button>
         </div>
     );
 }

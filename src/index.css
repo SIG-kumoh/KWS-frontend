@@ -25,4 +25,15 @@ button {
   font-size: 1.5rem;
   border-radius: 15px;
   padding: 0.4rem;
+  cursor: pointer;
+  position: relative;
+  width: 10rem;
+}
+.content_body {
+  display: flex;
+  width: 100%;
+}
+
+.main_content {
+  width: 100%;
 }
