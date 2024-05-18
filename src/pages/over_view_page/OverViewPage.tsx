@@ -7,8 +7,16 @@ import SubHead from "../../components/subhead/SubHead";
 import {Table} from "../../components/table/Table";
 import Loading from "../../components/loading/Loading";
 import PieChart from "../../components/pieChart/PieChart";
+import * as readline from "readline";
 
-const nodeData = {
+//TODO 아래 데이터들을 SERVER_URL + /db/nodes_spec 에서 받아오도록 수정
+const totalLimitResourcesData = {
+    vcpu: 12,
+    ram: 12.0,
+    disk: 160
+}
+
+const nodeLimitResourcesData = {
     vcpu: 6,
     ram: 6.0,
     disk: 80
@@ -65,6 +73,7 @@ export function OverViewPage() {
     }, []);
 
     function getUses() {
+        //console.log(chartData)
         if(chartData === null) return;
         chartData.nodes_resources.map((item:any) => {
             usesvcpu += item.vcpus;
@@ -77,23 +86,48 @@ export function OverViewPage() {
         <div className="overview_page">
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("요약")}
-            {isError ? SubHead("서버로부터 응답이 없습니다.") :
+            {isError || chartData == null ? SubHead("서버로부터 응답이 없습니다.") :
                 isLoading ? <Loading/> :
                     <>
-                        <p>Total Compute</p>
+                        <p>[전체 리소스 사용량]</p>
                         <div className={"summary_container"}>
-                            {PieChart(makePieChartProp({numbers: [chartData.total_resources.ram-usesram, usesram], title: "ram", total: chartData.total_resources.ram}))}
-                            {PieChart(makePieChartProp({numbers: [chartData.total_resources.vcpus-usesvcpu, usesvcpu], title: "vcpu", total: chartData.total_resources.vcpus}))}
-                            {PieChart(makePieChartProp({numbers: [chartData.total_resources.disk-usesdisk, usesdisk], title: "disk", total: chartData.total_resources.disk}))}
+                            {PieChart(makePieChartProp({
+                                numbers: [totalLimitResourcesData.vcpu, chartData.total_resources.vcpus],
+                                title: "vcpu",
+                                total: totalLimitResourcesData.vcpu
+                            }))}
+                            {PieChart(makePieChartProp({
+                                numbers: [totalLimitResourcesData.ram, chartData.total_resources.ram],
+                                title: "ram",
+                                total: totalLimitResourcesData.ram
+                            }))}
+                            {PieChart(makePieChartProp({
+                                numbers: [totalLimitResourcesData.disk, chartData.total_resources.disk],
+                                title: "disk",
+                                total: totalLimitResourcesData.disk
+                            }))}
                         </div>
-                        {chartData.nodes_resources.map((item:any) => {
+                        <p>[노드별 리소스 사용량]</p>
+                        {chartData.nodes_resources.map((item: any) => {
                             return (
                                 <>
-                                    <p>{item.name}</p>
+                                    <p>{item.name} 사용량</p>
                                     <div className={"summary_container"}>
-                                        {PieChart(makePieChartProp({numbers: [nodeData.ram, item.ram], title: "ram", total: nodeData.ram}))}
-                                        {PieChart(makePieChartProp({numbers: [nodeData.vcpu, item.vcpus], title: "vcpu", total: nodeData.vcpu}))}
-                                        {PieChart(makePieChartProp({numbers: [nodeData.disk, item.disk], title: "disk", total: nodeData.disk}))}
+                                        {PieChart(makePieChartProp({
+                                            numbers: [nodeLimitResourcesData.vcpu, item.vcpus],
+                                            title: "vcpu",
+                                            total: nodeLimitResourcesData.vcpu
+                                        }))}
+                                        {PieChart(makePieChartProp({
+                                            numbers: [nodeLimitResourcesData.ram, item.ram],
+                                            title: "ram",
+                                            total: nodeLimitResourcesData.ram
+                                        }))}
+                                        {PieChart(makePieChartProp({
+                                            numbers: [nodeLimitResourcesData.disk, item.disk],
+                                            title: "disk",
+                                            total: nodeLimitResourcesData.disk
+                                        }))}
                                     </div>
                                 </>
                             )

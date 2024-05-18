@@ -117,13 +117,14 @@ export default function RentalPage() {
                 end_date     : endDate.toISOString().split("T")[0],
                 image_name   : image,
                 flavor_name  : flavorData[flavor].name,
-                network_name : "shared",
-                password     : useKeyPair ? "" : password,
-                cloud_init   : "",
-                node_name    : "compute_node1",
                 vcpus        : null,
                 ram          : null,
-                disk         : null
+                disk         : null,
+                network_name : "shared",
+                subnet_cidr  : null,
+                password     : useKeyPair ? "" : password,
+                cloud_init   : "",
+                node_name    : "compute_node1"
             }),
             headers: {
                 'Content-Type': 'application/json'
