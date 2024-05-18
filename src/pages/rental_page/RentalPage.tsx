@@ -108,6 +108,11 @@ export default function RentalPage() {
     // rental request
     const url:string = SERVER_URL + "/openstack/rental"
     const rentalServer = async () => {
+        if (name === "" || serverName === "" || (password === "" && !useKeyPair) || image === "" || flavor === 0) {
+            alert("모든 항목을 입력해주세요")
+            setIsBtnDisabled(false)
+            return
+        }
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -135,6 +140,7 @@ export default function RentalPage() {
                 downloadFile(file);
             }
             alert("대여 완료")
+            setIsBtnDisabled(false)
         }).catch((error) => {
             console.log(error)
         });
