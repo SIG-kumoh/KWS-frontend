@@ -41,6 +41,7 @@ export default function RentalPage() {
         value:password, change: pwChange}
 
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
+    const [customFlavor, setCustomFlavor] = useState<boolean>(false)
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
@@ -165,7 +166,7 @@ export default function RentalPage() {
             {InputBox(serverNameInputBoxProps)}
 
             {SubHead("비밀번호")}
-            <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)}></input>
+            <input type="checkbox" onChange={({target: {checked}}) => setUseKeyPair(checked)}></input>
             키 페어 방식 사용
             {useKeyPair ? null : InputBox(pwInputBoxProps)}
 
@@ -179,6 +180,8 @@ export default function RentalPage() {
                 imageLoading ? <Loading/> : null}
 
             {SubHead("Flavor")}
+            <input type="checkbox" onChange={({target: {checked}}) => setCustomFlavor(checked)}></input>
+            flavor 지정
             {SelectTable(selectTableProps)}
             {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
                 flavorLoading ? <Loading/> : null}
