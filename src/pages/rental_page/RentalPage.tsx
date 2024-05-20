@@ -109,7 +109,7 @@ export default function RentalPage() {
     // rental request
     const url:string = SERVER_URL + "/openstack/rental"
     const rentalServer = async () => {
-        if (name === "" || serverName === "" || (password === "" && !useKeyPair) || image === "" || flavor === 0) {
+        if (name === "" || serverName === "" || (password === "" && useKeyPair) || image === "") {
             alert("모든 항목을 입력해주세요")
             setIsBtnDisabled(false)
             return

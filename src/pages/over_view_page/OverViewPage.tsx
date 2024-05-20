@@ -55,6 +55,7 @@ export function OverViewPage() {
     const [tableData, setTableData] = useState<TableData[]>([]);
     const [chartData, setChartData] = useState<any>();
     const tableDataUrl = SERVER_URL + "/db/servers";
+    const chartDataUrl = SERVER_URL + "/openstack/resources";
 
     const makeTableData = (data:any) => {
         setTableData([]);
@@ -81,7 +82,7 @@ export function OverViewPage() {
         }).catch((error) => {
             setIsError(true);
         });
-        fetch(SERVER_URL + "/openstack/resources", {
+        fetch(chartDataUrl, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
