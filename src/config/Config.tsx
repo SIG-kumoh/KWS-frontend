@@ -24,10 +24,11 @@ export interface TableData {
     server_name: string;
     host_ip: string;
     rental_period: string;
-    server_data: serverData;
+    server_data_extension: serverData;
+    server_data_return: serverData;
 }
 
-export const SERVER_URL = "http://192.168.0.215:8000";
+export const SERVER_URL: string = "http://122.46.233.235:58080";
 
 export interface TableProps {
     data: TableData[];
