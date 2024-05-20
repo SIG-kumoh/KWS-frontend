@@ -15,8 +15,9 @@ import DatePick from "../../components/datePick/DatePick";
 import SelectTable from "../../components/selectTable/SelectTable";
 import Loading from "../../components/loading/Loading";
 import RadioList from "../../components/radioList/RadioList";
-import {Simulate} from "react-dom/test-utils";
-import input = Simulate.input;
+import ArrowUp from "../../components/arrow/ArrowUp";
+import "./rental_page.css";
+import ArrowDown from "../../components/arrow/ArrowDown";
 
 
 export default function RentalPage() {
@@ -42,6 +43,7 @@ export default function RentalPage() {
 
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
     const [customFlavor, setCustomFlavor] = useState<boolean>(false)
+    const [advancedSetting, setAdvancedSetting] = useState<boolean>(false)
 
     const [startDate, setStartDate] = useState<Date>(new Date());
     const [endDate, setEndDate] = useState<Date>(new Date());
@@ -73,6 +75,14 @@ export default function RentalPage() {
          }).catch((error) => {
              setImageLoadError(true);
          })
+        fetch(flavorUrl, {
+            method: 'GET'
+        }).then(res => res.json()).then((result) => {
+            makeFlavorTableData(result);
+            setFlavorLoading(false);
+        }).catch((error) => {
+            setFlavorLoadError(true);
+        });
     }, []);
     const radioListProps: RadioListProps = {name: 'image', items: imageData, change: setImage}
 
@@ -94,16 +104,6 @@ export default function RentalPage() {
             }]);
         });
     };
-    useEffect(() => {
-        fetch(flavorUrl, {
-            method: 'GET'
-        }).then(res => res.json()).then((result) => {
-            makeFlavorTableData(result);
-            setFlavorLoading(false);
-        }).catch((error) => {
-            setFlavorLoadError(true);
-        });
-    }, []);
     const selectTableProps: SelectTableProps = {rows:flavorData, change: flavorChange}
 
     // rental request
@@ -186,6 +186,13 @@ export default function RentalPage() {
             {SelectTable(selectTableProps)}
             {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
                 flavorLoading ? <Loading/> : null}
+
+            <div className="advanced_setting_container">
+                <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
+                    {advancedSetting ? ArrowUp() : ArrowDown()}
+                    {SubHead("고급 설정")}
+                </div>
+            </div>
 
             <button className="submit_button"
                     disabled={isBtnDisabled}

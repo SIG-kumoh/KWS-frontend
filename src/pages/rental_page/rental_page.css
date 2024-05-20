@@ -1,0 +1,4 @@
+.advanced_setting_container .advanced_setting_header {
+    display: flex;
+    align-items: center;
+}
