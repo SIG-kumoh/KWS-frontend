@@ -126,7 +126,7 @@ export default function RentalPage() {
                 vcpus        : null,
                 ram          : null,
                 disk         : null,
-                network_name : "shared",
+                network_name : "default",
                 subnet_cidr  : null,
                 password     : useKeyPair ? "" : password,
                 cloud_init   : "",
