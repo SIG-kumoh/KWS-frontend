@@ -34,7 +34,7 @@ export default function PieChart(prop: PieChartProps) {
                 height={"150%"}
                 data={data}
             />
-            <p>{prop.total} / {prop.data[1]}</p>
+            <p>{prop.data[1]} / {prop.total}</p>
         </div>
     )
 }
