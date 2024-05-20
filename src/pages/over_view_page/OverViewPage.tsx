@@ -7,31 +7,54 @@ import SubHead from "../../components/subhead/SubHead";
 import {Table} from "../../components/table/Table";
 import Loading from "../../components/loading/Loading";
 import PieChart from "../../components/pieChart/PieChart";
-import * as readline from "readline";
 
-//TODO 아래 데이터들을 SERVER_URL + /db/nodes_spec 에서 받아오도록 수정
-const totalLimitResourcesData = {
-    vcpu: 12,
-    ram: 12.0,
-    disk: 160
-}
-
-const nodeLimitResourcesData = {
-    vcpu: 6,
-    ram: 6.0,
-    disk: 80
+interface CharData {
+    total_info: {
+        limit: {
+            vcpu: number,
+            ram: number,
+            disk: number
+        },
+        using: {
+            count: number,
+            vcpus: number,
+            ram: number,
+            disk: number
+        },
+        remaining: {
+            vcpu: number,
+            ram: number,
+            disk: number
+        }
+    },
+    node_resources: {
+        name: string,
+        limit: {
+            vcpu: number,
+            ram: number,
+            disk: number
+        },
+        using: {
+            count: number,
+            vcpus: number,
+            ram: number,
+            disk: number
+        },
+        remaining: {
+            vcpus: number,
+            ram: number,
+            disk: number
+        }
+    }[]
 }
 
 export function OverViewPage() {
     const {selected} = useContext(SidebarContext);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
-    const [tableData, setTableData] = useState<TableData[]>([])
-    const [chartData, setChartData] = useState<any>(null)
+    const [tableData, setTableData] = useState<TableData[]>([]);
+    const [chartData, setChartData] = useState<any>();
     const tableDataUrl = SERVER_URL + "/db/servers";
-    let usesvcpu = 0;
-    let usesram = 0;
-    let usesdisk = 0;
 
     const makeTableData = (data:any) => {
         setTableData([]);
@@ -64,23 +87,12 @@ export function OverViewPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
-            setChartData(result);
+            setChartData(makeChartData(result));
             setIsLoading(false);
-            getUses()
         }).catch((error) => {
             setIsError(true);
         })
     }, []);
-
-    function getUses() {
-        //console.log(chartData)
-        if(chartData === null) return;
-        chartData.nodes_resources.map((item:any) => {
-            usesvcpu += item.vcpus;
-            usesram += item.ram;
-            usesdisk += item.disk;
-        });
-    }
 
     return (
         <div className="overview_page">
@@ -89,44 +101,44 @@ export function OverViewPage() {
             {isError || chartData == null ? SubHead("서버로부터 응답이 없습니다.") :
                 isLoading ? <Loading/> :
                     <>
-                        <p>[전체 리소스 사용량]</p>
+                        <h4>[전체 리소스 사용량]</h4>
                         <div className={"summary_container"}>
                             {PieChart(makePieChartProp({
-                                numbers: [totalLimitResourcesData.vcpu, chartData.total_resources.vcpus],
+                                numbers: [chartData.total_info.remaining.vcpu, chartData.total_info.using.vcpus],
                                 title: "vcpu",
-                                total: totalLimitResourcesData.vcpu
+                                total: chartData.total_info.limit.vcpu
                             }))}
                             {PieChart(makePieChartProp({
-                                numbers: [totalLimitResourcesData.ram, chartData.total_resources.ram],
+                                numbers: [chartData.total_info.remaining.ram, chartData.total_info.using.ram],
                                 title: "ram",
-                                total: totalLimitResourcesData.ram
+                                total: chartData.total_info.limit.ram
                             }))}
                             {PieChart(makePieChartProp({
-                                numbers: [totalLimitResourcesData.disk, chartData.total_resources.disk],
+                                numbers: [chartData.total_info.remaining.disk, chartData.total_info.using.disk],
                                 title: "disk",
-                                total: totalLimitResourcesData.disk
+                                total: chartData.total_info.limit.disk
                             }))}
                         </div>
-                        <p>[노드별 리소스 사용량]</p>
-                        {chartData.nodes_resources.map((item: any) => {
+                        <h4>[노드별 리소스 사용량]</h4>
+                        {chartData.node_resources.map((item: any) => {
                             return (
                                 <>
                                     <p>{item.name} 사용량</p>
                                     <div className={"summary_container"}>
                                         {PieChart(makePieChartProp({
-                                            numbers: [nodeLimitResourcesData.vcpu, item.vcpus],
+                                            numbers: [item.remaining.vcpus, item.using.vcpus],
                                             title: "vcpu",
-                                            total: nodeLimitResourcesData.vcpu
+                                            total: item.limit.vcpu
                                         }))}
                                         {PieChart(makePieChartProp({
-                                            numbers: [nodeLimitResourcesData.ram, item.ram],
+                                            numbers: [item.remaining.ram, item.using.ram],
                                             title: "ram",
-                                            total: nodeLimitResourcesData.ram
+                                            total: item.limit.ram
                                         }))}
                                         {PieChart(makePieChartProp({
-                                            numbers: [nodeLimitResourcesData.disk, item.disk],
+                                            numbers: [item.remaining.disk, item.using.disk],
                                             title: "disk",
-                                            total: nodeLimitResourcesData.disk
+                                            total: item.limit.disk
                                         }))}
                                     </div>
                                 </>
@@ -150,4 +162,48 @@ function makePieChartProp(prop: IProp) : PieChartProps {
     const labels = ["non-use", "use"];
     const data = prop.numbers;
     return {labels: labels, data: data, title: prop.title, total: prop.total};
+}
+
+function makeChartData(prop:any):CharData {
+    return {
+        total_info: {
+            limit: {
+                vcpu: prop.limit_resources.total_spec.vcpu,
+                ram: prop.limit_resources.total_spec.ram,
+                disk: prop.limit_resources.total_spec.disk
+            },
+            using: {
+                count: prop.using_resources.total_resources.count,
+                vcpus: prop.using_resources.total_resources.vcpus,
+                ram: prop.using_resources.total_resources.ram,
+                disk: prop.using_resources.total_resources.disk
+            },
+            remaining: {
+                vcpu: prop.limit_resources.total_spec.vcpu - prop.using_resources.total_resources.vcpus,
+                ram: prop.limit_resources.total_spec.ram - prop.using_resources.total_resources.ram,
+                disk: prop.limit_resources.total_spec.disk - prop.using_resources.total_resources.disk
+            }
+        },
+        node_resources: prop.limit_resources.nodes_spec.map((item:any, idx:number) => {
+            return {
+                name: item.name,
+                limit: {
+                    vcpu: item.vcpu,
+                    ram: item.ram,
+                    disk: item.disk
+                },
+                using: {
+                    count: prop.using_resources.nodes_resources[idx].count,
+                    vcpus: prop.using_resources.nodes_resources[idx].vcpus,
+                    ram: prop.using_resources.nodes_resources[idx].ram,
+                    disk: prop.using_resources.nodes_resources[idx].disk
+                },
+                remaining: {
+                    vcpus: item.vcpu - prop.using_resources.nodes_resources[idx].vcpus,
+                    ram: item.ram - prop.using_resources.nodes_resources[idx].ram,
+                    disk: item.disk - prop.using_resources.nodes_resources[idx].disk
+                }
+            }
+        })
+    }
 }
