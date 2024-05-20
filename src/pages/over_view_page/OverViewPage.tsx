@@ -65,7 +65,8 @@ export function OverViewPage() {
                 server_name: item.server_name,
                 host_ip: item.floating_ip,
                 rental_period: item.start_date.split("T")[0] + " ~ " + item.end_date.split("T")[0],
-                server_data: {server_name: item.server_name, host_ip: item.floating_ip}
+                server_data_extension: {server_name: item.server_name, host_ip: item.floating_ip},
+                server_data_return: {server_name: item.server_name, host_ip: item.floating_ip}
             }]);
         });
     };
@@ -121,9 +122,9 @@ export function OverViewPage() {
                             }))}
                         </div>
                         <h4>[노드별 리소스 사용량]</h4>
-                        {chartData.node_resources.map((item: any) => {
+                        {chartData.node_resources.map((item: any, idx:number) => {
                             return (
-                                <>
+                                <div key={idx}>
                                     <p>{item.name} 사용량</p>
                                     <div className={"summary_container"}>
                                         {PieChart(makePieChartProp({
@@ -142,7 +143,7 @@ export function OverViewPage() {
                                             total: item.limit.disk
                                         }))}
                                     </div>
-                                </>
+                                </div>
                             )
                         })}
                     </>

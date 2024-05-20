@@ -35,15 +35,15 @@ export function Table(props: TableProps) {
             header: () => '대여 기간',
             cell: info => info.renderValue()
         }),
-        columnHelper.accessor('server_data', {
+        /*columnHelper.accessor('server_data', {
             header: () => '복사',
             cell: info => <button onClick={() => handleCopyClipBoard(`${info.getValue().server_name}@${info.getValue().host_ip}`)}>복사</button>
-        }),
-        columnHelper.accessor('server_data', {
+        }),*/
+        columnHelper.accessor('server_data_extension', {
             header: () => '연장',
             cell: info => <button onClick={() => navigate('/extension', {state: info.getValue()})}>연장</button>
         }),
-        columnHelper.accessor('server_data', {
+        columnHelper.accessor('server_data_return', {
             header: () => '반납',
             cell: info => <button onClick={() => navigate('/return', {state: info.getValue()})}>반납</button>
         }),
