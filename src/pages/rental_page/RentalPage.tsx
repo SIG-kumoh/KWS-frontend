@@ -2,6 +2,8 @@ import PageHeader from "../../components/header/PageHeader";
 import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
 import {
+    ComboBoxItem,
+    ComboBoxProps,
     DatePickProps,
     InputBoxProps, RadioListItem, RadioListProps,
     SelectTableItem,
@@ -18,6 +20,7 @@ import RadioList from "../../components/radioList/RadioList";
 import ArrowUp from "../../components/arrow/ArrowUp";
 import "./rental_page.css";
 import ArrowDown from "../../components/arrow/ArrowDown";
+import ComboBox from "../../components/comboBox/ComboBox";
 
 
 export default function RentalPage() {
@@ -52,6 +55,7 @@ export default function RentalPage() {
     const startDatePickProps:DatePickProps = {date: startDate, change: startDateChange}
     const endDatePickProps:DatePickProps = {date: endDate, change: endDateChange}
 
+
     // set image radio list
     const [image, setImage] = useState<string>('');
     const imageUrl = SERVER_URL + "/openstack/image_list";
@@ -66,24 +70,6 @@ export default function RentalPage() {
             }]);
         });
     };
-    useEffect(() => {
-         fetch(imageUrl, {
-             method: 'GET'
-         }).then(res => res.json()).then((result) => {
-             makeImageData(result);
-             setImageLoading(false);
-         }).catch((error) => {
-             setImageLoadError(true);
-         })
-        fetch(flavorUrl, {
-            method: 'GET'
-        }).then(res => res.json()).then((result) => {
-            makeFlavorTableData(result);
-            setFlavorLoading(false);
-        }).catch((error) => {
-            setFlavorLoadError(true);
-        });
-    }, []);
     const radioListProps: RadioListProps = {name: 'image', items: imageData, change: setImage}
 
     // set flavor select table
@@ -106,6 +92,57 @@ export default function RentalPage() {
     };
     const selectTableProps: SelectTableProps = {rows:flavorData, change: flavorChange}
 
+
+
+    //advanced setting
+    const networkUrl = SERVER_URL + '/openstack/networks';
+    const [createNetwork, setCreateNetwork] = useState<boolean>(false)
+    const [networkData, setNetworkData] = useState<ComboBoxItem[]>([])
+    const [network, setNetwork] = useState<string>('')
+    const [networkLoading, setNetworkLoading] = useState<boolean>(true);
+    const [networkLoadError, setNetworkLoadError] = useState<boolean>(false);
+    const makeNetworkData = (data: any) => {
+        setNetworkData([]);
+        data.map((item: any) => {
+            setNetworkData((prev:ComboBoxItem[]) => [...prev, {
+                value: item.name + ':' + item.subnet_cidr,
+                label: item.name + ' / ' + item.subnet_cidr
+            }]);
+        });
+    };
+    useEffect(() => {
+    }, []);
+    const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
+
+
+    useEffect(() => {
+        fetch(imageUrl, {
+            method: 'GET'
+        }).then(res => res.json()).then((result) => {
+            makeImageData(result);
+            setImageLoading(false);
+        }).catch((error) => {
+            setImageLoadError(true);
+        })
+        fetch(flavorUrl, {
+            method: 'GET'
+        }).then(res => res.json()).then((result) => {
+            makeFlavorTableData(result);
+            setFlavorLoading(false);
+        }).catch((error) => {
+            setFlavorLoadError(true);
+        });
+        fetch(networkUrl, {
+            method: 'GET'
+        }).then(res => res.json()).then((result) => {
+            makeNetworkData(result);
+            setNetworkLoading(false);
+        }).catch((error) => {
+            setNetworkLoadError(true);
+        })
+    }, []);
+
+
     // rental request
     const url:string = SERVER_URL + "/openstack/rental"
     const rentalServer = async () => {
@@ -114,6 +151,13 @@ export default function RentalPage() {
             setIsBtnDisabled(false)
             return
         }
+        let networkName = null;
+        let subnetCidr = null;
+        if (advancedSetting) {
+            networkName = createNetwork ? null : network.split(':')[0];
+            subnetCidr = createNetwork ? null : network.split(':')[1];
+        }
+
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -126,8 +170,8 @@ export default function RentalPage() {
                 vcpus        : null,
                 ram          : null,
                 disk         : null,
-                network_name : "default",
-                subnet_cidr  : null,
+                network_name : networkName,
+                subnet_cidr  : subnetCidr,
                 password     : useKeyPair ? "" : password,
                 cloud_init   : "",
                 node_name    : "compute_node1"
@@ -156,6 +200,8 @@ export default function RentalPage() {
 
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
+
+
 
     return (
         <div>
@@ -189,9 +235,20 @@ export default function RentalPage() {
 
             <div className="advanced_setting_container">
                 <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
-                    {advancedSetting ? ArrowUp() : ArrowDown()}
+                    {advancedSetting ? ArrowDown() : ArrowUp()}
                     {SubHead("고급 설정")}
                 </div>
+                {advancedSetting ?
+                    <div className="advanced_setting_content">
+                        {SubHead("네트워킹")}
+                        <input type="checkbox" onChange={({ target: { checked } }) => setCreateNetwork(checked)} />기존 네트워크에 연결
+                        {createNetwork ?
+                            null :
+                            (ComboBox(networkProps))
+                        }
+
+                    </div> : null
+                }
             </div>
 
             <button className="submit_button"

@@ -66,3 +66,14 @@ export interface PieChartProps {
     title: string;
     total: number;
 }
+
+export interface ComboBoxProps {
+    name: string;
+    items: ComboBoxItem[];
+    change: (value:string) => void;
+}
+
+export interface ComboBoxItem {
+    value: string;
+    label: string;
+}
