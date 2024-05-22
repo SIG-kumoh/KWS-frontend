@@ -7,7 +7,7 @@ import {
     SelectTableItem,
     SelectTableProps,
     SERVER_URL,
-    sidebarPanel, TableData
+    sidebarPanel, ServerTableData
 } from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";

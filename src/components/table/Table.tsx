@@ -1,54 +1,12 @@
 import "./table.css"
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
+import {flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
 import React, {useEffect} from "react";
-import {TableData, TableProps} from "../../config/Config";
-import {useNavigate} from "react-router-dom";
+import {TableProps} from "../../config/Config";
 
 
 export function Table(props: TableProps) {
     const [data, _setData] = React.useState(() => [...props.data])
-    const columnHelper = createColumnHelper<TableData>()
-    const handleCopyClipBoard = async (text: string) => {
-        try {
-            await navigator.clipboard.writeText(text);
-            alert("클립보드에 링크가 복사되었어요.");
-        } catch (err) {
-            console.log(err);
-        }
-    };
-    const navigate = useNavigate()
-    const columns = [
-        columnHelper.accessor('name', {
-            cell: info => info.getValue(),
-            header: () => '이름'
-        }),
-        columnHelper.accessor('server_name', {
-            cell: info => info.getValue(),
-            header: () => '인스턴스명'
-        }),
-
-        columnHelper.accessor('host_ip', {
-            cell: info => <>{info.getValue()}</>,
-            header: () => 'IP'
-        }),
-        columnHelper.accessor('rental_period', {
-            header: () => '대여 기간',
-            cell: info => info.renderValue()
-        }),
-        /*columnHelper.accessor('server_data', {
-            header: () => '복사',
-            cell: info => <button onClick={() => handleCopyClipBoard(`${info.getValue().server_name}@${info.getValue().host_ip}`)}>복사</button>
-        }),*/
-        columnHelper.accessor('server_data_extension', {
-            header: () => '연장',
-            cell: info => <button onClick={() => navigate('/extension', {state: info.getValue()})}>연장</button>
-        }),
-        columnHelper.accessor('server_data_return', {
-            header: () => '반납',
-            cell: info => <button onClick={() => navigate('/return', {state: info.getValue()})}>반납</button>
-        }),
-    ]
-
+    const columns = props.columns
     useEffect(() => {
         _setData([...props.data])
     }, [props.data]);
