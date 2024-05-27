@@ -11,6 +11,7 @@ import ExtensionPage from "./pages/extension_page/ExtensionPage";
 import ReturnPage from "./pages/return_page/ReturnPage";
 import ContainerExtensionPage from "./pages/container_extension_page/ContainerExtensionPage";
 import ContainerReturnPage from "./pages/container_return_page/ContainerReturnPage";
+import ContainerRentalPage from "./pages/container_rental_page/ContainerRentalPage";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -29,6 +30,7 @@ root.render(
                       <Route path="/server/rental" element={<RentalPage />}/>
                       <Route path="/server/extension" element={<ExtensionPage />}/>
                       <Route path="/server/return" element={<ReturnPage />}/>
+                      <Route path="/container/rental" element={<ContainerRentalPage/>}/>
                       <Route path="/container/extension" element={<ContainerExtensionPage/>}/>
                       <Route path="/container/return" element={<ContainerReturnPage/>}/>
                   </Routes>

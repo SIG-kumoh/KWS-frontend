@@ -61,8 +61,8 @@ export function OverViewPage() {
     const [isError, setIsError] = useState<boolean>(false);
     const [serverData, setServerData] = useState<ServerTableData[]>([]);
     const [containerData, setContainerData] = useState<ContainerTableData[]>([]);
-    const [chartData, setChartData] = useState<any>();
-    const ServerTableDataUrl = SERVER_URL + "/db/servers";
+    const [chartData, setChartData] = useState<any>(null);
+    const serverTableDataUrl = SERVER_URL + "/db/servers";
     const chartDataUrl = SERVER_URL + "/openstack/resources";
     const containerTableDataUrl = SERVER_URL + "/db/containers";
 
@@ -102,16 +102,14 @@ export function OverViewPage() {
     }
 
     useEffect(() => {
-        fetch(ServerTableDataUrl, {
+        fetch(serverTableDataUrl, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
             makeTableData(result);
-            setIsLoading(false);
         }).catch((error) => {
-            setIsError(true);
         });
         fetch(chartDataUrl, {
             method: 'GET',
@@ -131,17 +129,14 @@ export function OverViewPage() {
             }
         }).then(res => res.json()).then((result) => {
             makeContainerData(result);
-            setIsLoading(false);
         }).catch((error) => {
-            setIsError(true);
         });
     }, []);
-
     return (
         <div className="overview_page">
             {PageHeader('시스템 현황')}
             {SubHead("요약")}
-            {isError || chartData == null ? SubHead("서버로부터 응답이 없습니다.") :
+            {isError ? SubHead("서버로부터 응답이 없습니다.") :
                 isLoading ? <Loading/> :
                     <>
                         <h4>[전체 리소스 사용량]</h4>
