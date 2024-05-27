@@ -21,6 +21,7 @@ import ArrowUp from "../../components/svg/ArrowUp";
 import "./rental_page.css";
 import ArrowDown from "../../components/svg/ArrowDown";
 import ComboBox from "../../components/comboBox/ComboBox";
+import Help from "../../components/svg/Help";
 
 
 export default function RentalPage() {
@@ -114,6 +115,14 @@ export default function RentalPage() {
     }, []);
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
 
+    //cloud init
+    const [cloudInitData, setCloudInitData] = useState<string>('')
+    const cloudInitChange = (target:any) => {
+        setCloudInitData(target.value)
+    }
+    const couldInitInputBoxProps:InputBoxProps = {type:"text", placeholder:"",
+        value:cloudInitData, change: cloudInitChange}
+
 
     useEffect(() => {
         fetch(imageUrl, {
@@ -153,9 +162,11 @@ export default function RentalPage() {
         }
         let networkName = null;
         let subnetCidr = null;
+        let cloudInit = null;
         if (advancedSetting) {
             networkName = createNetwork ? null : network.split(':')[0];
             subnetCidr = createNetwork ? null : network.split(':')[1];
+            cloudInit = cloudInitData;
         }
 
         fetch(url, {
@@ -173,8 +184,7 @@ export default function RentalPage() {
                 network_name : networkName,
                 subnet_cidr  : subnetCidr,
                 password     : useKeyPair ? "" : password,
-                cloud_init   : "",
-                node_name    : "compute_node1"
+                cloud_init   : cloudInit
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -240,8 +250,18 @@ export default function RentalPage() {
                 </div>
                 {advancedSetting ?
                     <div className="advanced_setting_content">
+                        <div className="cloud_init_container">
+                            {SubHead("Cloud-init")}
+                            <span className="cloud_svg_container"
+                                  data-tooltip-text="가상 머신이 설치되는 동안 cloud-init 스트립트가 실행됩니다 #cloud-config은 빼고 입력하세요"
+                            >
+                                <Help/>
+                            </span>
+                        </div>
+                        {InputBox(couldInitInputBoxProps)}
                         {SubHead("네트워킹")}
-                        <input type="checkbox" onChange={({ target: { checked } }) => setCreateNetwork(checked)} />기존 네트워크에 연결
+                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>기존 네트워크에
+                        연결
                         {createNetwork ?
                             null :
                             (ComboBox(networkProps))
