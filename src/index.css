@@ -37,3 +37,11 @@ button {
 .main_content {
   width: 100%;
 }
+
+.date_pick_container {
+  display: flex;
+  align-items: center;
+}
+.date_pick_container .sub_head {
+  margin: 0 1rem;
+}

@@ -5,4 +5,6 @@
 .input_box input {
     width: 50%;
     font-size: 1.3rem;
+    overflow-x: auto;
+    white-space: nowrap;
 }

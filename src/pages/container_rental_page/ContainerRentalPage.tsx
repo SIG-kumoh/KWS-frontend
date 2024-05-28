@@ -58,7 +58,7 @@ export default function ContainerRentalPage() {
 
 
     //advanced setting
-    const networkUrl = SERVER_URL + '/openstack/networks';
+    const networkUrl = SERVER_URL + '/network/list';
     const [createNetwork, setCreateNetwork] = useState<boolean>(false)
     const [networkData, setNetworkData] = useState<ComboBoxItem[]>([])
     const [network, setNetwork] = useState<string>('')
@@ -170,8 +170,11 @@ export default function ContainerRentalPage() {
             {InputBox(pwInputBoxProps)}
 
             {SubHead("대여 기간")}
-            {DatePick(startDatePickProps)}
-            {DatePick(endDatePickProps)}
+            <div className="date_pick_container">
+                {DatePick(startDatePickProps)}
+                {SubHead("~")}
+                {DatePick(endDatePickProps)}
+            </div>
 
             {SubHead("이미지")}
             {InputBox(imageInputBoxProps)}

@@ -11,7 +11,7 @@ export default function ContainerReturnPage() {
     const {selected, setSelected} = useContext(SidebarContext);
     const hasInfo:boolean = state != undefined
     if(state != undefined) {
-        setSelected(3)
+        setSelected(7)
     }
     const [name, setName] = useState<string>("")
     const [password, setPassword] = useState<string>("")

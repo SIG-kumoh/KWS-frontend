@@ -34,7 +34,7 @@ export default function ContainerExtensionPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
-    const url:string = SERVER_URL + "/db/container_extension"
+    const url:string = SERVER_URL + "/container/extension"
     const extensionServer = async () => {
         const formData = new FormData()
         if(hasInfo) {

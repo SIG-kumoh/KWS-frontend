@@ -9,8 +9,8 @@ import {useLocation} from "react-router-dom";
 export default function ReturnPage() {
     const {state} = useLocation()
     const {selected, setSelected} = useContext(SidebarContext);
-    const hasInfo:boolean = state != undefined
-    if(state != undefined) {
+    const hasInfo:boolean = (state != undefined)
+    if(hasInfo) {
         setSelected(3)
     }
     const [name, setName] = useState<string>("")
@@ -18,7 +18,7 @@ export default function ReturnPage() {
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
     const [keyFile, setKeyFile] = useState<File>(new File([], ''));
     const [ip, setIp] = useState<string>("")
-    const url = SERVER_URL + "/openstack/return"
+    const url = SERVER_URL + "/server/return"
     const nameChange = (target:any) => {
         setName(target.value)
     }

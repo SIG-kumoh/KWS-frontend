@@ -59,7 +59,7 @@ export default function RentalPage() {
 
     // set image radio list
     const [image, setImage] = useState<string>('');
-    const imageUrl = SERVER_URL + "/openstack/image_list";
+    const imageUrl = SERVER_URL + "/image/list";
     const [imageLoading, setImageLoading] = useState<boolean>(true);
     const [imageLoadError, setImageLoadError] = useState<boolean>(false);
     const [imageData, setImageData] = useState<RadioListItem[]>([])
@@ -76,7 +76,7 @@ export default function RentalPage() {
     // set flavor select table
     const [flavor, setFlavor] = useState<number>(0);
     const flavorChange = (value: number) => {setFlavor(value)}
-    const flavorUrl = SERVER_URL + "/openstack/flavor_list";
+    const flavorUrl = SERVER_URL + "/flavor/list";
     const [flavorLoading, setFlavorLoading] = useState<boolean>(true);
     const [flavorLoadError, setFlavorLoadError] = useState<boolean>(false);
     const [flavorData, setFlavorData] = useState<SelectTableItem[]>([])
@@ -96,7 +96,7 @@ export default function RentalPage() {
 
 
     //advanced setting
-    const networkUrl = SERVER_URL + '/openstack/networks';
+    const networkUrl = SERVER_URL + '/network/list';
     const [createNetwork, setCreateNetwork] = useState<boolean>(false)
     const [networkData, setNetworkData] = useState<ComboBoxItem[]>([])
     const [network, setNetwork] = useState<string>('')
@@ -153,7 +153,7 @@ export default function RentalPage() {
 
 
     // rental request
-    const url:string = SERVER_URL + "/openstack/rental"
+    const url:string = SERVER_URL + "/server/rental"
     const rentalServer = async () => {
         if (name === "" || serverName === "" || (password === "" && useKeyPair) || image === "") {
             alert("모든 항목을 입력해주세요")
@@ -228,8 +228,12 @@ export default function RentalPage() {
             {useKeyPair ? null : InputBox(pwInputBoxProps)}
 
             {SubHead("대여 기간")}
-            {DatePick(startDatePickProps)}
-            {DatePick(endDatePickProps)}
+            <div className="date_pick_container">
+                {DatePick(startDatePickProps)}
+                {SubHead("~")}
+                {DatePick(endDatePickProps)}
+            </div>
+
 
             {SubHead("OS 이미지")}
             {RadioList(radioListProps)}

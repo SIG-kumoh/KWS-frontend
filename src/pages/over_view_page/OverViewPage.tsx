@@ -62,9 +62,9 @@ export function OverViewPage() {
     const [serverData, setServerData] = useState<ServerTableData[]>([]);
     const [containerData, setContainerData] = useState<ContainerTableData[]>([]);
     const [chartData, setChartData] = useState<any>(null);
-    const serverTableDataUrl = SERVER_URL + "/db/servers";
-    const chartDataUrl = SERVER_URL + "/openstack/resources";
-    const containerTableDataUrl = SERVER_URL + "/db/containers";
+    const serverTableDataUrl = SERVER_URL + "/server/list";
+    const chartDataUrl = SERVER_URL + "/node/resources";
+    const containerTableDataUrl = SERVER_URL + "/container/list";
 
     const makeTableData = (data:any) => {
         setServerData([]);

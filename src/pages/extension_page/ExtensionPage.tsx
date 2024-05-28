@@ -10,8 +10,8 @@ import {useLocation} from "react-router-dom";
 export default function ExtensionPage() {
     const {state} = useLocation()
     const {selected, setSelected} = useContext(SidebarContext);
-    const hasInfo:boolean = state != undefined
-    if(state != undefined) {
+    const hasInfo:boolean = (state != undefined)
+    if(hasInfo) {
         setSelected(2)
     }
     const [serverName, setServerName] = useState<string>("")
@@ -45,7 +45,7 @@ export default function ExtensionPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
-    const url:string = SERVER_URL + "/db/extension"
+    const url:string = SERVER_URL + "/server/extension"
     const extensionServer = async () => {
         const formData = new FormData()
         if(hasInfo) {
