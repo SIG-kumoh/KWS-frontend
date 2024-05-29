@@ -9,6 +9,11 @@
 .advanced_setting_container .cloud_init_container .cloud_svg_container {
     margin-left: 1rem;
 }
+.cloud_init_textarea {
+    width: 50%;
+    height: 8rem;
+    resize: none;
+}
 [data-tooltip-text]:hover {
     position: relative;
 }

@@ -262,7 +262,7 @@ export default function RentalPage() {
                                 <Help/>
                             </span>
                         </div>
-                        {InputBox(couldInitInputBoxProps)}
+                        <textarea className="cloud_init_textarea" onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
                         {SubHead("네트워킹")}
                         <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>기존 네트워크에
                         연결
