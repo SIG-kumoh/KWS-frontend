@@ -27,16 +27,15 @@ export default function ContainerReturnPage() {
         value:password, change: pwChange}
 
     const returnServer = async () => {
-        const formData = new FormData()
-        if(hasInfo) {
-            formData.append('container_name', state);
-        } else {
-            formData.append('container_name', name);
-        }
-        formData.append('password',  password);
         fetch(url, {
             method: 'DELETE',
-            body: formData
+            body: JSON.stringify({
+                container_name: hasInfo? state:name,
+                password: password,
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(res => {
             return res.json().then(data => {
                 if (!res.ok) {
