@@ -230,11 +230,11 @@ export default function RentalPage() {
     }
     const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"",
         value:newFlavorName, change: newFlavorNameChange}
-    const newVcpuInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newVcpuInputProps:InputBoxProps = {type:"number", placeholder:"",
         value:newVcpu, change: newVcpuChange}
-    const newRamInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newRamInputProps:InputBoxProps = {type:"number", placeholder:"",
         value:newRam, change: newRamChange}
-    const newDiskInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newDiskInputProps:InputBoxProps = {type:"number", placeholder:"",
         value:newDisk, change: newDiskChange}
 
 
