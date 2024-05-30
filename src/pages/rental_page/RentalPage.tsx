@@ -107,12 +107,10 @@ export default function RentalPage() {
         data.map((item: any) => {
             setNetworkData((prev:ComboBoxItem[]) => [...prev, {
                 value: item.name + ':' + item.subnet_cidr,
-                label: item.name + ' / ' + item.subnet_cidr
+                label: item.name + ' ' + item.subnet_cidr
             }]);
         });
     };
-    useEffect(() => {
-    }, []);
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
 
     //cloud init
@@ -164,8 +162,8 @@ export default function RentalPage() {
         let subnetCidr = null;
         let cloudInit = null;
         if (advancedSetting) {
-            networkName = createNetwork ? null : network.split(':')[0];
-            subnetCidr = createNetwork ? null : network.split(':')[1];
+            networkName = createNetwork ? newNetworkName : network.split(':')[0];
+            subnetCidr = createNetwork ? newSubnet : network.split(':')[1];
             cloudInit = cloudInitData;
         }
 
@@ -211,6 +209,19 @@ export default function RentalPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
+
+    const [newNetworkName, setNewNetworkName] = useState<string>("")
+    const [newSubnet, setNewSubnet] = useState<string>("")
+    const newNetworkNameChange = (target:any) => {
+        setNewNetworkName(target.value)
+    }
+    const newSubnetChange = (target:any) => {
+        setNewSubnet(target.value)
+    }
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"새 네트워크 이름을 입력하시오",
+        value:serverName, change: serverNameChange}
+    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"서브넷을 입력하시오",
+        value:password, change: pwChange}
 
 
     return (
@@ -264,11 +275,20 @@ export default function RentalPage() {
                         </div>
                         <textarea className="cloud_init_textarea" onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
                         {SubHead("네트워킹")}
-                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>기존 네트워크에
-                        연결
+
+                        <input type="checkbox" onChange={({ target: { checked } }) => setCreateNetwork(checked)} />새로운 네트워크에 연결
                         {createNetwork ?
-                            null :
-                            (ComboBox(networkProps))
+                            <div className="new_network_container">
+                                <span className="new_network_name">
+                                    <h4>네트워크 이름</h4>
+                                    {InputBox(newNetworkNameInputProps)}
+                                </span>
+                                <span className="new_subnet">
+                                    <h4>서브넷(CIDR)</h4>
+                                    {InputBox(newSubnetInputProps)}
+                                </span>
+                            </div> :
+                            ComboBox(networkProps)
                         }
 
                     </div> : null

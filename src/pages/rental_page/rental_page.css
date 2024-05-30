@@ -44,3 +44,17 @@
 
     z-index: 9999;
 }
+
+.new_network_name, .new_subnet {
+    display: flex;
+    align-items: center;
+}
+
+
+.new_network_container h4 {
+    min-width: 150px;
+}
+
+.new_network_container .input_box {
+    padding: 0.5rem 0;
+}
