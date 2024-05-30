@@ -121,8 +121,8 @@ export default function ContainerRentalPage() {
         if (advancedSetting) {
             networkName = createNetwork ? newNetworkName : network.split(':')[0];
             subnetCidr = createNetwork ? newSubnet : network.split(':')[1];
-            env = envData;
-            cmd = cmdData;
+            env = envData === "" ? null : envData;
+            cmd = cmdData === "" ? null : cmdData;
         }
 
         fetch(url, {

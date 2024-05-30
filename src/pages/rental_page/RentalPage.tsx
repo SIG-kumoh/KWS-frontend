@@ -105,10 +105,12 @@ export default function RentalPage() {
     const makeNetworkData = (data: any) => {
         setNetworkData([]);
         data.map((item: any) => {
-            setNetworkData((prev:ComboBoxItem[]) => [...prev, {
-                value: item.name + ':' + item.subnet_cidr,
-                label: item.name + ' ' + item.subnet_cidr
-            }]);
+            if (!item.is_external) {
+                setNetworkData((prev:ComboBoxItem[]) => [...prev, {
+                    value: item.name + ':' + item.subnet_cidr,
+                    label: item.name + ' ' + item.subnet_cidr
+                }]);
+            }
         });
     };
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
@@ -154,7 +156,7 @@ export default function RentalPage() {
     // rental request
     const url:string = SERVER_URL + "/server/rental"
     const rentalServer = async () => {
-        if (name === "" || serverName === "" || (password === "" && useKeyPair) || image === "") {
+        if (name === "" || serverName === "" || (password === "" && !useKeyPair) || image === "") {
             alert("모든 항목을 입력해주세요")
             setIsBtnDisabled(false)
             return
