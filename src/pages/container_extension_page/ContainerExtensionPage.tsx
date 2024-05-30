@@ -33,17 +33,16 @@ export default function ContainerExtensionPage() {
 
     const url:string = SERVER_URL + "/container/extension"
     const extensionServer = async () => {
-        const formData = new FormData()
-        if(hasInfo) {
-            formData.append('container_name', state);
-        } else {
-            formData.append('container_name', containerName);
-        }
-        formData.append('password', password);
-        formData.append('end_date', endDate.toISOString().split("T")[0])
         fetch(url, {
             method: 'PUT',
-            body: formData
+            body: JSON.stringify({
+                container_name: hasInfo? state:containerName,
+                password: password,
+                end_date: endDate.toISOString().split("T")[0]
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
         }).then(res => res).then(res => res.ok ? alert("연장 완료") : alert("연장 실패"))
             .catch((error) => {console.error('Error:', error)})
     }
