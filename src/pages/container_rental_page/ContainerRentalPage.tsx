@@ -142,11 +142,25 @@ export default function ContainerRentalPage() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then((res) => {
-            alert("대여 완료")
-            setIsBtnDisabled(false)
+        }).then(res => {
+            return res.json().then(data => {
+                if (!res.ok) {
+                    return { res: data, state: false };
+                } else {
+                    return { res: data, state: true };
+                }
+            });
+        }).then(({ res, state }) => {
+            if (state) {
+                alert("대여 완료");
+            } else {
+                alert(res.data);
+            }
+            setIsBtnDisabled(false);
         }).catch((error) => {
-            console.log(error)
+            alert("대여 실패");
+            console.log(error);
+            setIsBtnDisabled(false);
         });
     }
 

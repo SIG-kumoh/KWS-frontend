@@ -43,8 +43,26 @@ export default function ContainerExtensionPage() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res).then(res => res.ok ? alert("연장 완료") : alert("연장 실패"))
-            .catch((error) => {console.error('Error:', error)})
+        }).then(res => {
+            return res.json().then(data => {
+                if (!res.ok) {
+                    return { res: data, state: false };
+                } else {
+                    return { res: data, state: true };
+                }
+            });
+        }).then(({ res, state }) => {
+            if (state) {
+                alert("연장 완료");
+            } else {
+                alert(res.data);
+            }
+            setIsBtnDisabled(false);
+        }).catch((error) => {
+            alert("연장 실패");
+            console.log(error);
+            setIsBtnDisabled(false);
+        });
     }
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -57,6 +75,8 @@ export default function ContainerExtensionPage() {
         } else if(containerName === "" || password === "") {
             alert("모든 항목을 입력해주세요")
             setIsBtnDisabled(false)
+        } else {
+            extensionServer()
         }
     }
     useEffect(()=>
