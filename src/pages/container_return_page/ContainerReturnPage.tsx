@@ -1,5 +1,5 @@
 import {useLocation} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
 import {InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
 import PageHeader from "../../components/header/PageHeader";
@@ -9,10 +9,7 @@ import InputBox from "../../components/InputBox/InputBox";
 export default function ContainerReturnPage() {
     const {state} = useLocation()
     const {selected, setSelected} = useContext(SidebarContext);
-    const hasInfo:boolean = state != undefined
-    if(state != undefined) {
-        setSelected(7)
-    }
+    const hasInfo:boolean = (state != undefined)
     const [name, setName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     //Button disable state
@@ -32,7 +29,7 @@ export default function ContainerReturnPage() {
     const returnServer = async () => {
         const formData = new FormData()
         if(hasInfo) {
-            formData.append('container_name', state.container_name);
+            formData.append('container_name', state);
         } else {
             formData.append('container_name', name);
         }
@@ -54,11 +51,15 @@ export default function ContainerReturnPage() {
         returnServer()
     }
 
+    useEffect(()=>
+        setSelected(8)
+    )
+
     return (
         <div>
-            {PageHeader(sidebarPanel[selected].name)}
+            {PageHeader("컨테이너 반납")}
             {SubHead("컨테이너명")}
-            {hasInfo ? SubHead(state.container_name) : InputBox(nameInputBoxProps)}
+            {hasInfo ? SubHead(state) : InputBox(nameInputBoxProps)}
 
             {SubHead("비밀번호")}
             {InputBox(pwInputBoxProps)}

@@ -1,6 +1,6 @@
 import "./over_view_page.css"
 import PageHeader from "../../components/header/PageHeader";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {
     PieChartProps,
     SERVER_URL,
@@ -14,6 +14,7 @@ import Loading from "../../components/loading/Loading";
 import PieChart from "../../components/pieChart/PieChart";
 import {createColumnHelper} from "@tanstack/react-table";
 import {NavigateFunction, useNavigate} from "react-router-dom";
+import {SidebarContext} from "../../context/SidebarContext";
 
 interface CharData {
     total_info: {
@@ -56,6 +57,7 @@ interface CharData {
 }
 
 export function OverViewPage() {
+    const {selected, setSelected} = useContext(SidebarContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [isError, setIsError] = useState<boolean>(false);
@@ -84,7 +86,7 @@ export function OverViewPage() {
         });
     };
     const makeContainerData = (data:any) => {
-        setChartData([]);
+        setContainerData([]);
         data.map((item:any) => {
             setContainerData((prev:ContainerTableData[]) => [...prev, {
                 name: item.user_name,
@@ -102,6 +104,7 @@ export function OverViewPage() {
     }
 
     useEffect(() => {
+        setSelected(0)
         fetch(serverTableDataUrl, {
             method: 'GET',
             headers: {

@@ -1,5 +1,5 @@
 import {useLocation} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
 import {DatePickProps, InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
 import PageHeader from "../../components/header/PageHeader";
@@ -11,9 +11,6 @@ export default function ContainerExtensionPage() {
     const {state} = useLocation()
     const {selected, setSelected} = useContext(SidebarContext);
     const hasInfo:boolean = state != undefined
-    if(state != undefined) {
-        setSelected(6)
-    }
     const [containerName, setContainerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     
@@ -38,7 +35,7 @@ export default function ContainerExtensionPage() {
     const extensionServer = async () => {
         const formData = new FormData()
         if(hasInfo) {
-            formData.append('container_name', state.container_name);
+            formData.append('container_name', state);
         } else {
             formData.append('container_name', containerName);
         }
@@ -59,12 +56,15 @@ export default function ContainerExtensionPage() {
         }
         extensionServer();
     }
+    useEffect(()=>
+        setSelected(5)
+    )
 
     return (
         <div>
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("컨테이너명")}
-            {hasInfo ? SubHead(state.container_name) : InputBox(containerNameInputBoxProps)}
+            {hasInfo ? SubHead(state) : InputBox(containerNameInputBoxProps)}
 
             {SubHead("비밀번호")}
             {InputBox(pwInputBoxProps)}

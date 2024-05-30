@@ -20,7 +20,7 @@ import "./container_rental_page.css";
 
 
 export default function ContainerRentalPage() {
-    const {selected} = useContext(SidebarContext);
+    const {selected, setSelected} = useContext(SidebarContext);
     const [name, setName] = useState<string>("")
     const [containerName, setContainerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
@@ -94,6 +94,7 @@ export default function ContainerRentalPage() {
         value:cmdData, change: cmdChange}
 
     useEffect(() => {
+        setSelected(4)
         fetch(networkUrl, {
             method: 'GET'
         }).then(res => res.json()).then((result) => {
@@ -159,7 +160,7 @@ export default function ContainerRentalPage() {
 
     return (
         <div>
-            {PageHeader(sidebarPanel[selected].name)}
+            {PageHeader("컨테이너 대여")}
             {SubHead("사용자명")}
             {InputBox(nameInputBoxProps)}
 

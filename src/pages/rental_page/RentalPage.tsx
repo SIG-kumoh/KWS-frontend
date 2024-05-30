@@ -25,7 +25,7 @@ import Help from "../../components/svg/Help";
 
 
 export default function RentalPage() {
-    const {selected} = useContext(SidebarContext);
+    const {selected, setSelected} = useContext(SidebarContext);
     const [name, setName] = useState<string>("")
     const [serverName, setServerName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
@@ -123,6 +123,7 @@ export default function RentalPage() {
 
 
     useEffect(() => {
+        setSelected(1)
         fetch(imageUrl, {
             method: 'GET'
         }).then(res => res.json()).then((result) => {
@@ -226,7 +227,7 @@ export default function RentalPage() {
 
     return (
         <div>
-            {PageHeader(sidebarPanel[selected].name)}
+            {PageHeader('서버 대여')}
             {SubHead("사용자명")}
             {InputBox(nameInputBoxProps)}
 

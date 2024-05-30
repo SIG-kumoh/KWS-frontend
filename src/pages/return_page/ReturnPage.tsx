@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {SidebarContext} from "../../context/SidebarContext";
 import PageHeader from "../../components/header/PageHeader";
 import {InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
@@ -10,9 +10,9 @@ export default function ReturnPage() {
     const {state} = useLocation()
     const {selected, setSelected} = useContext(SidebarContext);
     const hasInfo:boolean = (state != undefined)
-    if(hasInfo) {
+    useEffect(()=>
         setSelected(3)
-    }
+    )
     const [name, setName] = useState<string>("")
     const [password, setPassword] = useState<string>("")
     const [useKeyPair, setUseKeyPair] = useState<boolean>(false)
@@ -71,7 +71,7 @@ export default function ReturnPage() {
 
     return (
         <div>
-            {PageHeader(sidebarPanel[selected].name)}
+            {PageHeader("서버 반납")}
             {SubHead("인스턴스명")}
             {hasInfo ? SubHead(state.server_name) : InputBox(nameInputBoxProps)}
 
