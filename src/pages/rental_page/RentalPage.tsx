@@ -188,16 +188,30 @@ export default function RentalPage() {
             headers: {
                 'Content-Type': 'application/json'
             }
-        }).then(res => res.json()).then(({name, private_key}) => {
-            if(useKeyPair) {
-                const blob = new Blob([private_key], {type: 'plain/text'});
-                const file = new File([blob], name, {type: 'plain/text'});
-                downloadFile(file);
+        }).then(res => {
+            return res.json().then(data => {
+                if (!res.ok) {
+                    return { res: data, state: false };
+                } else {
+                    return { res: data, state: true };
+                }
+            });
+        }).then(({ res, state }) => {
+            if (state) {
+                if (useKeyPair) {
+                    const blob = new Blob([res.private_key], { type: 'plain/text' });
+                    const file = new File([blob], `${name}.txt`, { type: 'plain/text' });
+                    downloadFile(file);
+                }
+                alert("대여 완료");
+            } else {
+                alert(res.data);
             }
-            alert("대여 완료")
-            setIsBtnDisabled(false)
+            setIsBtnDisabled(false);
         }).catch((error) => {
-            console.log(error)
+            alert("대여 실패");
+            console.log(error);
+            setIsBtnDisabled(false);
         });
     }
 
