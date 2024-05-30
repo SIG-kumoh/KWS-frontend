@@ -119,8 +119,8 @@ export default function ContainerRentalPage() {
         let env = null;
         let cmd = null;
         if (advancedSetting) {
-            networkName = createNetwork ? null : network.split(':')[0];
-            subnetCidr = createNetwork ? null : network.split(':')[1];
+            networkName = createNetwork ? newNetworkName : network.split(':')[0];
+            subnetCidr = createNetwork ? newSubnet : network.split(':')[1];
             env = envData;
             cmd = cmdData;
         }
@@ -158,6 +158,20 @@ export default function ContainerRentalPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
+
+    const [newNetworkName, setNewNetworkName] = useState<string>("")
+    const [newSubnet, setNewSubnet] = useState<string>("")
+    const newNetworkNameChange = (target:any) => {
+        setNewNetworkName(target.value)
+    }
+    const newSubnetChange = (target:any) => {
+        setNewSubnet(target.value)
+    }
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newNetworkName, change: newNetworkNameChange}
+    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newSubnet, change: newSubnetChange}
+
     return (
         <div>
             {PageHeader("컨테이너 대여")}
@@ -189,11 +203,23 @@ export default function ContainerRentalPage() {
                 {advancedSetting ?
                     <div className="advanced_setting_content">
                         {SubHead("네트워킹")}
-                        <input type="checkbox" onChange={({ target: { checked } }) => setCreateNetwork(checked)} />기존 네트워크에 연결
+
+                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>
+                        새로운 네트워크에 연결
                         {createNetwork ?
-                            null :
-                            (ComboBox(networkProps))
+                            <div className="new_network_container">
+                                <span className="new_network_name">
+                                    <h4>네트워크 이름</h4>
+                                    {InputBox(newNetworkNameInputProps)}
+                                </span>
+                                <span className="new_subnet">
+                                    <h4>서브넷(CIDR)</h4>
+                                    {InputBox(newSubnetInputProps)}
+                                </span>
+                            </div> :
+                            ComboBox(networkProps)
                         }
+
                         {SubHead("환경변수")}
                         {InputBox(envInputBoxProps)}
                         <div className="env_help">

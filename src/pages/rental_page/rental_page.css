@@ -58,3 +58,11 @@
 .new_network_container .input_box {
     padding: 0.5rem 0;
 }
+
+.select_box .input_box {
+    padding: 0;
+    width: 8rem;
+}
+.select_box .input_box input {
+    width: 100%;
+}

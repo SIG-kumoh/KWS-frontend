@@ -176,10 +176,10 @@ export default function RentalPage() {
                 start_date   : startDate.toISOString().split("T")[0],
                 end_date     : endDate.toISOString().split("T")[0],
                 image_name   : image,
-                flavor_name  : flavorData[flavor].name,
-                vcpus        : flavorData[flavor].cpu,
-                ram          : flavorData[flavor].ram,
-                disk         : flavorData[flavor].disk,
+                flavor_name  : customFlavor? newFlavorName : flavorData[flavor].name,
+                vcpus        : customFlavor? newVcpu : flavorData[flavor].cpu,
+                ram          : customFlavor? newRam : flavorData[flavor].ram,
+                disk         : customFlavor? newDisk : flavorData[flavor].disk,
                 network_name : networkName,
                 subnet_cidr  : subnetCidr,
                 password     : useKeyPair ? "" : password,
@@ -211,6 +211,33 @@ export default function RentalPage() {
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
 
+    const [newFlavorName, setNewFlavorName] = useState<string>('')
+    const [newVcpu, setNewVcpu] = useState<string>('')
+    const [newRam, setNewRam] = useState<string>('')
+    const [newDisk, setNewDisk] = useState<string>('')
+
+    const newFlavorNameChange = (target:any) => {
+        setNewFlavorName(target.value)
+    }
+    const newVcpuChange = (target:any) => {
+        setNewVcpu(target.value)
+    }
+    const newRamChange = (target:any) => {
+        setNewRam(target.value)
+    }
+    const newDiskChange = (target:any) => {
+        setNewDisk(target.value)
+    }
+    const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newFlavorName, change: newFlavorNameChange}
+    const newVcpuInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newVcpu, change: newVcpuChange}
+    const newRamInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newRam, change: newRamChange}
+    const newDiskInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newDisk, change: newDiskChange}
+
+
     const [newNetworkName, setNewNetworkName] = useState<string>("")
     const [newSubnet, setNewSubnet] = useState<string>("")
     const newNetworkNameChange = (target:any) => {
@@ -219,10 +246,10 @@ export default function RentalPage() {
     const newSubnetChange = (target:any) => {
         setNewSubnet(target.value)
     }
-    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"새 네트워크 이름을 입력하시오",
-        value:serverName, change: serverNameChange}
-    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"서브넷을 입력하시오",
-        value:password, change: pwChange}
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newNetworkName, change: newNetworkNameChange}
+    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"",
+        value:newSubnet, change: newSubnetChange}
 
 
     return (
@@ -254,8 +281,26 @@ export default function RentalPage() {
 
             {SubHead("Flavor")}
             <input type="checkbox" onChange={({target: {checked}}) => setCustomFlavor(checked)}></input>
-            flavor 지정
-            {SelectTable(selectTableProps)}
+            커스텀 flavor
+            <div className="select_box" style={{display: customFlavor?'block':'none'}}>
+                <table>
+                    <thead><tr>
+                        <th>프리셋</th>
+                        <th>VCPUS</th>
+                        <th>RAM</th>
+                        <th>디스크 총계</th>
+                    </tr></thead>
+                    <tbody><tr>
+                        <td>{InputBox(newFlavorNameInputProps)}</td>
+                        <td>{InputBox(newVcpuInputProps)}</td>
+                        <td>{InputBox(newRamInputProps)}</td>
+                        <td>{InputBox(newDiskInputProps)}</td>
+                    </tr></tbody>
+                </table>
+            </div>
+            <div className="flavor_select" style={{display: customFlavor?'none':'block'}}>
+                {SelectTable(selectTableProps)}
+            </div>
             {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
                 flavorLoading ? <Loading/> : null}
 
@@ -274,10 +319,12 @@ export default function RentalPage() {
                                 <Help/>
                             </span>
                         </div>
-                        <textarea className="cloud_init_textarea" onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
+                        <textarea className="cloud_init_textarea"
+                                  onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
                         {SubHead("네트워킹")}
 
-                        <input type="checkbox" onChange={({ target: { checked } }) => setCreateNetwork(checked)} />새로운 네트워크에 연결
+                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>
+                        새로운 네트워크에 연결
                         {createNetwork ?
                             <div className="new_network_container">
                                 <span className="new_network_name">
