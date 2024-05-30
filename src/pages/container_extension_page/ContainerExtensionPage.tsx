@@ -50,11 +50,15 @@ export default function ContainerExtensionPage() {
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
         setIsBtnDisabled(true)
-        if(containerName === "" || password === "") {
+        if (hasInfo && password === "") {
+            alert("비밀번호를 입력해주세요")
+            setIsBtnDisabled(false)
+        } else if (hasInfo) {
+            extensionServer()
+        } else if(containerName === "" || password === "") {
             alert("모든 항목을 입력해주세요")
-            return
+            setIsBtnDisabled(false)
         }
-        extensionServer();
     }
     useEffect(()=>
         setSelected(5)

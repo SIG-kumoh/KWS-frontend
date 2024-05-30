@@ -44,11 +44,15 @@ export default function ContainerReturnPage() {
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         setIsBtnDisabled(true)
-        if(name === "" || password === "") {
+        if (hasInfo && password === "") {
+            alert("비밀번호를 입력해주세요")
+            setIsBtnDisabled(false)
+        } else if (hasInfo) {
+            returnServer()
+        } else if(name === "" || password === "") {
             alert("모든 항목을 입력해주세요")
-            return
+            setIsBtnDisabled(false)
         }
-        returnServer()
     }
 
     useEffect(()=>
