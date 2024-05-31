@@ -104,6 +104,7 @@ export default function RentalPage() {
     const [networkLoadError, setNetworkLoadError] = useState<boolean>(false);
     const makeNetworkData = (data: any) => {
         setNetworkData([]);
+        data = data.filter((e: any) => !e.is_external);
         data.map((item: any) => {
             setNetworkData((prev:ComboBoxItem[]) => [...prev, {
                 value: item.name + ':' + item.subnet_cidr,
