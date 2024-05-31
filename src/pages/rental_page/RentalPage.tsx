@@ -105,14 +105,14 @@ export default function RentalPage() {
     const makeNetworkData = (data: any) => {
         setNetworkData([]);
         data.map((item: any) => {
-            if (!item.is_external) {
-                setNetworkData((prev:ComboBoxItem[]) => [...prev, {
-                    value: item.name + ':' + item.subnet_cidr,
-                    label: item.name + ' ' + item.subnet_cidr
-                }]);
-            }
+            setNetworkData((prev:ComboBoxItem[]) => [...prev, {
+                value: item.name + ':' + item.subnet_cidr,
+                label: item.name + ' ' + item.subnet_cidr
+            }]);
         });
-        setNetwork(networkData[0].value)
+        try {
+            setNetwork(data[0].name + ':' + data[0].subnet_cidr)
+        } catch (e) {}
     };
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
 

@@ -69,10 +69,12 @@ export default function ContainerRentalPage() {
         data.map((item: any) => {
             setNetworkData((prev:ComboBoxItem[]) => [...prev, {
                 value: item.name + ':' + item.subnet_cidr,
-                label: item.name + ' / ' + item.subnet_cidr
+                label: item.name + ' ' + item.subnet_cidr
             }]);
         });
-        setNetwork(networkData[0].value)
+        try {
+            setNetwork(data[0].name + ':' + data[0].subnet_cidr)
+        } catch (e) {}
     };
     useEffect(() => {
     }, []);
