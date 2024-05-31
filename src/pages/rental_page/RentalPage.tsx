@@ -203,7 +203,7 @@ export default function RentalPage() {
             if (state) {
                 if (useKeyPair) {
                     const blob = new Blob([res.private_key], { type: 'plain/text' });
-                    const file = new File([blob], `${name}.txt`, { type: 'plain/text' });
+                    const file = new File([blob], `${serverName}.pem`, { type: 'plain/text' });
                     downloadFile(file);
                 }
                 alert("대여 완료");
