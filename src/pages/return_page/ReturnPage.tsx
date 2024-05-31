@@ -80,12 +80,12 @@ export default function ReturnPage() {
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault()
         setIsBtnDisabled(true)
-        if (hasInfo && (password === "" && useKeyPair)) {
+        if (hasInfo && (password === "" && !useKeyPair)) {
             alert("비밀번호를 입력해주세요")
             setIsBtnDisabled(false)
         } else if (hasInfo) {
             returnServer()
-        } else if(name === "" || (password === "" && useKeyPair) || ip === "") {
+        } else if(name === "" || (password === "" && !useKeyPair) || ip === "") {
             alert("모든 항목을 입력해주세요")
             setIsBtnDisabled(false)
         } else {

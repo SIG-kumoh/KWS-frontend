@@ -72,6 +72,7 @@ export default function ContainerRentalPage() {
                 label: item.name + ' / ' + item.subnet_cidr
             }]);
         });
+        setNetwork(networkData[0].value)
     };
     useEffect(() => {
     }, []);
@@ -239,7 +240,7 @@ export default function ContainerRentalPage() {
                         <div className="env_help">
                             {SubHead("명령어")}
                             <span className="help_svg_container"
-                                data-tooltip-text="Dockerfile에서 작성하는 CMD와 같은 양식으로 작성해주세요"
+                                data-tooltip-text="명령어A,명령어B의 꼴로 작성해주세요."
                             >
                                 <Help/>
                             </span>

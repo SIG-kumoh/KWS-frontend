@@ -112,6 +112,7 @@ export default function RentalPage() {
                 }]);
             }
         });
+        setNetwork(networkData[0].value)
     };
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
 
@@ -178,13 +179,13 @@ export default function RentalPage() {
                 start_date   : startDate.toISOString().split("T")[0],
                 end_date     : endDate.toISOString().split("T")[0],
                 image_name   : image,
-                flavor_name  : customFlavor? newFlavorName : flavorData[flavor].name,
-                vcpus        : customFlavor? newVcpu : flavorData[flavor].cpu,
-                ram          : customFlavor? newRam : flavorData[flavor].ram,
-                disk         : customFlavor? newDisk : flavorData[flavor].disk,
+                flavor_name  : customFlavor ? newFlavorName : flavorData[flavor].name,
+                vcpus        : customFlavor ? newVcpu : flavorData[flavor].cpu,
+                ram          : customFlavor ? newRam : flavorData[flavor].ram,
+                disk         : customFlavor ? newDisk : flavorData[flavor].disk,
                 network_name : networkName,
                 subnet_cidr  : subnetCidr,
-                password     : useKeyPair ? "" : password,
+                password     : useKeyPair ? null : password,
                 cloud_init   : cloudInit
             }),
             headers: {
