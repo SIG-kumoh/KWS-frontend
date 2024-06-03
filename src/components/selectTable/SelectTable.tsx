@@ -15,9 +15,9 @@ export default function SelectTable(props: SelectTableProps) {
                 <thead>
                 <tr>
                     <th>프리셋</th>
-                    <th>VCPUS</th>
-                    <th>RAM</th>
-                    <th>디스크 총계</th>
+                    <th>VCPUS(개)</th>
+                    <th>RAM(MB)</th>
+                    <th>디스크 총계(GB)</th>
                 </tr>
                 </thead>
                 <tbody>

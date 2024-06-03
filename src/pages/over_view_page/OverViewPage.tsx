@@ -67,6 +67,7 @@ export function OverViewPage() {
     const serverTableDataUrl = SERVER_URL + "/server/list";
     const chartDataUrl = SERVER_URL + "/node/resources";
     const containerTableDataUrl = SERVER_URL + "/container/list";
+    const [colorList, setColorList] = useState<string[]>([]);
 
     const makeTableData = (data:any) => {
         setServerData([]);
@@ -103,6 +104,14 @@ export function OverViewPage() {
         });
     }
 
+    const makeColorList = (length:number) => {
+        let list = []
+        for(let i=0; i<length; i++){
+            list.push(getRGB(i*121212))
+        }
+        setColorList(list)
+    }
+
     useEffect(() => {
         setSelected(0)
         fetch(serverTableDataUrl, {
@@ -120,6 +129,7 @@ export function OverViewPage() {
                 'Content-Type': 'application/json'
             }
         }).then(res => res.json()).then((result) => {
+            makeColorList(result.limit_resources.nodes_spec.length+1)
             setChartData(makeChartData(result));
             setIsLoading(false);
         }).catch((error) => {
@@ -143,21 +153,24 @@ export function OverViewPage() {
                 isLoading ? <Loading/> :
                     <>
                         <h4>[전체 리소스 사용량]</h4>
-                        <div className={"summary_container"}>
+                        <div className="summary_container">
                             {PieChart(makePieChartProp({
                                 numbers: [chartData.total_info.remaining.vcpu, chartData.total_info.using.vcpus],
                                 title: "vcpu",
-                                total: chartData.total_info.limit.vcpu
+                                total: chartData.total_info.limit.vcpu,
+                                color: colorList[0]
                             }))}
                             {PieChart(makePieChartProp({
                                 numbers: [chartData.total_info.remaining.ram, chartData.total_info.using.ram],
                                 title: "ram",
-                                total: chartData.total_info.limit.ram
+                                total: chartData.total_info.limit.ram,
+                                color: colorList[0]
                             }))}
                             {PieChart(makePieChartProp({
                                 numbers: [chartData.total_info.remaining.disk, chartData.total_info.using.disk],
                                 title: "disk",
-                                total: chartData.total_info.limit.disk
+                                total: chartData.total_info.limit.disk,
+                                color: colorList[0]
                             }))}
                         </div>
                         <h4>[노드별 리소스 사용량]</h4>
@@ -169,17 +182,20 @@ export function OverViewPage() {
                                         {PieChart(makePieChartProp({
                                             numbers: [item.remaining.vcpus, item.using.vcpus],
                                             title: "vcpu",
-                                            total: item.limit.vcpu
+                                            total: item.limit.vcpu,
+                                            color: colorList[idx+1]
                                         }))}
                                         {PieChart(makePieChartProp({
                                             numbers: [item.remaining.ram, item.using.ram],
                                             title: "ram",
-                                            total: item.limit.ram
+                                            total: item.limit.ram,
+                                            color: colorList[idx+1]
                                         }))}
                                         {PieChart(makePieChartProp({
                                             numbers: [item.remaining.disk, item.using.disk],
                                             title: "disk",
-                                            total: item.limit.disk
+                                            total: item.limit.disk,
+                                            color: colorList[idx+1]
                                         }))}
                                     </div>
                                 </div>
@@ -199,12 +215,27 @@ interface IProp {
     title: string;
     numbers: number[];
     total: number;
+    color: string;
 }
 
 function makePieChartProp(prop: IProp) : PieChartProps {
     const labels = ["non-use", "use"];
     const data = prop.numbers;
-    return {labels: labels, data: data, title: prop.title, total: prop.total};
+    return {labels: labels, data: data, title: prop.title, total: prop.total, unit: getUnit(prop.title), color: prop.color};
+}
+
+function getUnit(title:string): string{
+    if(title === "vcpu") return "개";
+    if(title === "ram") return "MB";
+    if(title === "disk") return "GB";
+    return "";
+}
+
+function getRGB(base:number) {
+    const r = Math.floor(Math.sin(base) * 127 + 128);
+    const g = Math.floor(Math.sin(base + 2) * 127 + 128);
+    const b = Math.floor(Math.sin(base + 4) * 127 + 128);
+    return `rgb(${r}, ${g}, ${b})`;
 }
 
 function makeChartData(prop:any):CharData {

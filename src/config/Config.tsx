@@ -6,9 +6,9 @@ export const sidebarPanel:ISidebar[] = [{name: '메인 화면', path: '/'},
     {name: '서버 대여', path: '/server/rental'},
     {name: '서버 연장', path: '/server/extension'},
     {name: '서버 반납', path: '/server/return'},
-    {name: '컨테이너 대여', path: '/container/rental'},
+    {name: '컨테이너 생성', path: '/container/rental'},
     {name: '컨테이너 연장', path: '/container/extension'},
-    {name: '컨테이너 반납', path: '/container/return'},
+    {name: '컨테이너 삭제', path: '/container/return'},
 ];
 
 export interface InputBoxProps {
@@ -49,7 +49,7 @@ export interface ContainerTableData {
     container_data_return: string;
 }
 
-export const SERVER_URL: string = "http://122.46.233.235:58080";
+export const SERVER_URL: string = "http://113.59.182.21:8000";
 
 export interface TableProps {
     data: any[];
@@ -88,6 +88,8 @@ export interface PieChartProps {
     labels: string[];
     title: string;
     total: number;
+    unit: string;
+    color: string;
 }
 
 export interface ComboBoxProps {
@@ -99,4 +101,10 @@ export interface ComboBoxProps {
 export interface ComboBoxItem {
     value: string;
     label: string;
+}
+
+export interface ModalProps {
+    show: boolean;
+    onClose: () => void;
+    children: React.ReactNode;
 }

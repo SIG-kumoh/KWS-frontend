@@ -5,6 +5,7 @@ import {PieChartProps} from "../../config/Config";
 
 export default function PieChart(prop: PieChartProps) {
     Chart.register(ArcElement, Title);
+
     const data = {
         labels: prop.labels,
         datasets: [
@@ -12,7 +13,7 @@ export default function PieChart(prop: PieChartProps) {
                 data: prop.data,
                 backgroundColor: [
                     "gray",
-                    "blue",
+                    prop.color,
                 ],
             }
         ],
@@ -34,7 +35,7 @@ export default function PieChart(prop: PieChartProps) {
                 height={"150%"}
                 data={data}
             />
-            <p>{prop.data[1]} / {prop.total}</p>
+            <p>{prop.data[1]} / {prop.total} {prop.unit}</p>
         </div>
     )
 }

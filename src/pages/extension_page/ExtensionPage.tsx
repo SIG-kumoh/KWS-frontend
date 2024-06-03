@@ -6,6 +6,8 @@ import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
 import DatePick from "../../components/datePick/DatePick";
 import {useLocation} from "react-router-dom";
+import Loading from "../../components/loading/Loading";
+import Modal from "../../components/modal/Modal";
 
 export default function ExtensionPage() {
     const {state} = useLocation()
@@ -42,6 +44,14 @@ export default function ExtensionPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
     const url:string = SERVER_URL + "/server/extension"
     const extensionServer = async () => {
         const formData = new FormData()
@@ -55,6 +65,7 @@ export default function ExtensionPage() {
         formData.append('password', (useKeyPair ? '' : password));
         formData.append('end_date', endDate.toISOString().split("T")[0])
         if (useKeyPair) formData.append('key_file', keyFile);
+        handleOpenModal()
         fetch(url, {
             method: 'PUT',
             body: formData
@@ -72,12 +83,13 @@ export default function ExtensionPage() {
             } else {
                 alert(res.data);
             }
-            setIsBtnDisabled(false);
         }).catch((error) => {
             alert("연장 실패");
             console.log(error);
-            setIsBtnDisabled(false);
-        });
+        }).finally(() => {
+            handleCloseModal();
+            setIsBtnDisabled(false)
+        })
     }
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -100,6 +112,12 @@ export default function ExtensionPage() {
 
     return (
         <div>
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>서버 연장 신청중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
             {PageHeader('서버 연장')}
             {SubHead("인스턴스명")}
             {hasInfo ? SubHead(state.server_name) : InputBox(serverNameInputBoxProps)}

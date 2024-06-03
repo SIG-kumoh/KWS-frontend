@@ -17,6 +17,8 @@ import ArrowDown from "../../components/svg/ArrowDown";
 import ComboBox from "../../components/comboBox/ComboBox";
 import Help from "../../components/svg/Help";
 import "./container_rental_page.css";
+import Loading from "../../components/loading/Loading";
+import Modal from "../../components/modal/Modal";
 
 
 export default function ContainerRentalPage() {
@@ -124,7 +126,7 @@ export default function ContainerRentalPage() {
             env = envData;
             cmd = cmdData;
         }
-
+        handleOpenModal()
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -152,16 +154,17 @@ export default function ContainerRentalPage() {
             });
         }).then(({ res, state }) => {
             if (state) {
-                alert("대여 완료");
+                alert("생성 완료");
             } else {
                 alert(res.data);
             }
-            setIsBtnDisabled(false);
         }).catch((error) => {
-            alert("대여 실패");
+            alert("생성 실패");
             console.log(error);
+        }).finally(() => {
+            handleCloseModal()
             setIsBtnDisabled(false);
-        });
+        })
     }
 
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -181,14 +184,29 @@ export default function ContainerRentalPage() {
     const newSubnetChange = (target:any) => {
         setNewSubnet(target.value)
     }
-    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크명 기본값: shared",
         value:newNetworkName, change: newNetworkNameChange}
-    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"ex) 192.168.233.0/24",
         value:newSubnet, change: newSubnetChange}
+
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div>
-            {PageHeader("컨테이너 대여")}
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>컨테이너 생성중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
+            {PageHeader("컨테이너 생성")}
             {SubHead("사용자명")}
             {InputBox(nameInputBoxProps)}
 
@@ -224,12 +242,12 @@ export default function ContainerRentalPage() {
                             <div className="new_network_container">
                                 <span className="new_network_name">
                                     <h4>네트워크 이름</h4>
-                                    {InputBox(newNetworkNameInputProps)}
                                 </span>
+                                {InputBox(newNetworkNameInputProps)}
                                 <span className="new_subnet">
                                     <h4>서브넷(CIDR)</h4>
-                                    {InputBox(newSubnetInputProps)}
                                 </span>
+                                {InputBox(newSubnetInputProps)}
                             </div> :
                             ComboBox(networkProps)
                         }

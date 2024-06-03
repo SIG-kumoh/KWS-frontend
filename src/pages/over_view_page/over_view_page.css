@@ -2,8 +2,13 @@
     width: 100%;
 }
 
+.overview_page .h4 {
+    margin: 1rem 0 ;
+}
+
 .summary_container {
     display: flex;
     width: 100%;
     justify-content: start;
+    margin-bottom: 2rem;
 }

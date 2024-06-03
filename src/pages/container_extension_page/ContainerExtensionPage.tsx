@@ -6,6 +6,8 @@ import PageHeader from "../../components/header/PageHeader";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
 import DatePick from "../../components/datePick/DatePick";
+import Loading from "../../components/loading/Loading";
+import Modal from "../../components/modal/Modal";
 
 export default function ContainerExtensionPage() {
     const {state} = useLocation()
@@ -33,6 +35,7 @@ export default function ContainerExtensionPage() {
 
     const url:string = SERVER_URL + "/container/extension"
     const extensionServer = async () => {
+        handleOpenModal()
         fetch(url, {
             method: 'PUT',
             body: JSON.stringify({
@@ -57,12 +60,13 @@ export default function ContainerExtensionPage() {
             } else {
                 alert(res.data);
             }
-            setIsBtnDisabled(false);
         }).catch((error) => {
             alert("연장 실패");
             console.log(error);
+        }).finally(() => {
+            handleCloseModal();
             setIsBtnDisabled(false);
-        });
+        })
     }
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         e.preventDefault();
@@ -83,8 +87,23 @@ export default function ContainerExtensionPage() {
         setSelected(5)
     )
 
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div>
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>컨테이너 연장중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
             {PageHeader(sidebarPanel[selected].name)}
             {SubHead("컨테이너명")}
             {hasInfo ? SubHead(state) : InputBox(containerNameInputBoxProps)}

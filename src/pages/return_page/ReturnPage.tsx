@@ -5,6 +5,8 @@ import {InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
 import {useLocation} from "react-router-dom";
+import Modal from "../../components/modal/Modal";
+import Loading from "../../components/loading/Loading";
 
 export default function ReturnPage() {
     const {state} = useLocation()
@@ -49,7 +51,7 @@ export default function ReturnPage() {
         }
         formData.append('password', (useKeyPair ? '' : password));
         if (useKeyPair) formData.append('key_file', keyFile);
-
+        handleOpenModal()
         fetch(url, {
             method: 'DELETE',
             body: formData
@@ -67,12 +69,13 @@ export default function ReturnPage() {
             } else {
                 alert(res.data);
             }
-            setIsBtnDisabled(false);
         }).catch((error) => {
             alert("반납 실패");
             console.log(error);
+        }).finally(() => {
             setIsBtnDisabled(false);
-        });
+            handleCloseModal();
+        })
             /*.then(res => res).then(res => res.ok ? alert("반납 완료") : alert("반납 실패"))
             .catch((error) => {console.error('Error:', error)})*/
     }
@@ -95,8 +98,22 @@ export default function ReturnPage() {
     //Button disable state
     const [isBtnDisabled, setIsBtnDisabled] = useState<boolean>(false)
 
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
     return (
         <div>
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>서버 반납 신청중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
             {PageHeader("서버 반납")}
             {SubHead("인스턴스명")}
             {hasInfo ? SubHead(state.server_name) : InputBox(nameInputBoxProps)}

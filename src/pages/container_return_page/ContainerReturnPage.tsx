@@ -5,6 +5,8 @@ import {InputBoxProps, SERVER_URL, sidebarPanel} from "../../config/Config";
 import PageHeader from "../../components/header/PageHeader";
 import SubHead from "../../components/subhead/SubHead";
 import InputBox from "../../components/InputBox/InputBox";
+import Loading from "../../components/loading/Loading";
+import Modal from "../../components/modal/Modal";
 
 export default function ContainerReturnPage() {
     const {state} = useLocation()
@@ -27,6 +29,7 @@ export default function ContainerReturnPage() {
         value:password, change: pwChange}
 
     const returnServer = async () => {
+        handleOpenModal()
         fetch(url, {
             method: 'DELETE',
             body: JSON.stringify({
@@ -50,12 +53,13 @@ export default function ContainerReturnPage() {
             } else {
                 alert(res.data);
             }
-            setIsBtnDisabled(false);
         }).catch((error) => {
             alert("반납 실패");
             console.log(error);
+        }).finally(() => {
             setIsBtnDisabled(false);
-        });
+            handleCloseModal()
+        })
     }
 
     const submit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -78,9 +82,24 @@ export default function ContainerReturnPage() {
         setSelected(6)
     )
 
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div>
-            {PageHeader("컨테이너 반납")}
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>컨테이너 삭제중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
+            {PageHeader("컨테이너 삭제")}
             {SubHead("컨테이너명")}
             {hasInfo ? SubHead(state) : InputBox(nameInputBoxProps)}
 

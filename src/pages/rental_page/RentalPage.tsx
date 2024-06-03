@@ -22,6 +22,7 @@ import "./rental_page.css";
 import ArrowDown from "../../components/svg/ArrowDown";
 import ComboBox from "../../components/comboBox/ComboBox";
 import Help from "../../components/svg/Help";
+import Modal from "../../components/modal/Modal";
 
 
 export default function RentalPage() {
@@ -167,7 +168,7 @@ export default function RentalPage() {
             subnetCidr = createNetwork ? newSubnet : network.split(':')[1];
             cloudInit = cloudInitData;
         }
-
+        handleOpenModal()
         fetch(url, {
             method: 'POST',
             body: JSON.stringify({
@@ -208,6 +209,7 @@ export default function RentalPage() {
                 alert(res.data);
             }
             setIsBtnDisabled(false);
+            handleCloseModal()
         }).catch((error) => {
             alert("대여 실패");
             console.log(error);
@@ -242,13 +244,13 @@ export default function RentalPage() {
     const newDiskChange = (target:any) => {
         setNewDisk(target.value)
     }
-    const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"인스턴스명",
         value:newFlavorName, change: newFlavorNameChange}
-    const newVcpuInputProps:InputBoxProps = {type:"number", placeholder:"",
+    const newVcpuInputProps:InputBoxProps = {type:"number", placeholder:"1,2,3,...",
         value:newVcpu, change: newVcpuChange}
-    const newRamInputProps:InputBoxProps = {type:"number", placeholder:"",
+    const newRamInputProps:InputBoxProps = {type:"number", placeholder:"MB",
         value:newRam, change: newRamChange}
-    const newDiskInputProps:InputBoxProps = {type:"number", placeholder:"",
+    const newDiskInputProps:InputBoxProps = {type:"number", placeholder:"GB",
         value:newDisk, change: newDiskChange}
 
 
@@ -260,14 +262,28 @@ export default function RentalPage() {
     const newSubnetChange = (target:any) => {
         setNewSubnet(target.value)
     }
-    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크명 기본값: shared",
         value:newNetworkName, change: newNetworkNameChange}
-    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"",
+    const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"ex) 192.168.233.0/24",
         value:newSubnet, change: newSubnetChange}
 
+    //modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
     return (
         <div>
+            <Modal show={isModalOpen} onClose={handleCloseModal}>
+                <div className="modal_content">
+                    <h2>서버 대여 신청중</h2>
+                    <Loading/>
+                </div>
+            </Modal>
             {PageHeader('서버 대여')}
             {SubHead("사용자명")}
             {InputBox(nameInputBoxProps)}
@@ -300,9 +316,9 @@ export default function RentalPage() {
                 <table>
                     <thead><tr>
                         <th>프리셋</th>
-                        <th>VCPUS</th>
-                        <th>RAM</th>
-                        <th>디스크 총계</th>
+                        <th>VCPUS(개)</th>
+                        <th>RAM(MB)</th>
+                        <th>디스크 총계(GB)</th>
                     </tr></thead>
                     <tbody><tr>
                         <td>{InputBox(newFlavorNameInputProps)}</td>
@@ -343,12 +359,12 @@ export default function RentalPage() {
                             <div className="new_network_container">
                                 <span className="new_network_name">
                                     <h4>네트워크 이름</h4>
-                                    {InputBox(newNetworkNameInputProps)}
                                 </span>
+                                {InputBox(newNetworkNameInputProps)}
                                 <span className="new_subnet">
                                     <h4>서브넷(CIDR)</h4>
-                                    {InputBox(newSubnetInputProps)}
                                 </span>
+                                {InputBox(newSubnetInputProps)}
                             </div> :
                             ComboBox(networkProps)
                         }
