@@ -15,6 +15,7 @@ import PieChart from "../../components/pieChart/PieChart";
 import {createColumnHelper} from "@tanstack/react-table";
 import {NavigateFunction, useNavigate} from "react-router-dom";
 import {SidebarContext} from "../../context/SidebarContext";
+import Help from "../../components/svg/Help";
 
 interface CharData {
     total_info: {
@@ -148,7 +149,14 @@ export function OverViewPage() {
     return (
         <div className="overview_page">
             {PageHeader('시스템 현황')}
-            {SubHead("요약")}
+            <div className="overview_title">
+                {SubHead("요약")}
+                <span className="title_svg_container"
+                      data-tooltip-text="CPU 정보: Intel Core I7 6700 3.4GHz"
+                >
+                    <Help/>
+                </span>
+            </div>
             {isError ? SubHead("서버로부터 응답이 없습니다.") :
                 isLoading ? <Loading/> :
                     <>
@@ -174,7 +182,7 @@ export function OverViewPage() {
                             }))}
                         </div>
                         <h4>[노드별 리소스 사용량]</h4>
-                        {chartData.node_resources.map((item: any, idx:number) => {
+                        {chartData.node_resources.map((item: any, idx: number) => {
                             return (
                                 <div key={idx}>
                                     <p>{item.name} 사용량</p>
@@ -183,19 +191,19 @@ export function OverViewPage() {
                                             numbers: [item.remaining.vcpus, item.using.vcpus],
                                             title: "vcpu",
                                             total: item.limit.vcpu,
-                                            color: colorList[idx+1]
+                                            color: colorList[idx + 1]
                                         }))}
                                         {PieChart(makePieChartProp({
                                             numbers: [item.remaining.ram, item.using.ram],
                                             title: "ram",
                                             total: item.limit.ram,
-                                            color: colorList[idx+1]
+                                            color: colorList[idx + 1]
                                         }))}
                                         {PieChart(makePieChartProp({
                                             numbers: [item.remaining.disk, item.using.disk],
                                             title: "disk",
                                             total: item.limit.disk,
-                                            color: colorList[idx+1]
+                                            color: colorList[idx + 1]
                                         }))}
                                     </div>
                                 </div>
@@ -218,7 +226,7 @@ interface IProp {
     color: string;
 }
 
-function makePieChartProp(prop: IProp) : PieChartProps {
+function makePieChartProp(prop: IProp): PieChartProps {
     const labels = ["non-use", "use"];
     const data = prop.numbers;
     return {labels: labels, data: data, title: prop.title, total: prop.total, unit: getUnit(prop.title), color: prop.color};

@@ -2,6 +2,15 @@
     width: 100%;
 }
 
+.overview_page .overview_title {
+    display: flex;
+    align-items: center;
+}
+
+.overview_page .overview_title .title_svg_container {
+    margin-left: 1rem;
+}
+
 .overview_page .h4 {
     margin: 1rem 0 ;
 }
