@@ -105,12 +105,16 @@ export default function RentalPage() {
     const [networkLoadError, setNetworkLoadError] = useState<boolean>(false);
     const makeNetworkData = (data: any) => {
         setNetworkData([]);
+        data = data.filter((e: any) => !e.is_external);
         data.map((item: any) => {
             setNetworkData((prev:ComboBoxItem[]) => [...prev, {
                 value: item.name + ':' + item.subnet_cidr,
                 label: item.name + ' ' + item.subnet_cidr
             }]);
         });
+        try {
+            setNetwork(data[0].name + ':' + data[0].subnet_cidr)
+        } catch (e) {}
     };
     const networkProps: ComboBoxProps = {name: 'network_dropdown', items: networkData, change: setNetwork}
 
@@ -155,7 +159,7 @@ export default function RentalPage() {
     // rental request
     const url:string = SERVER_URL + "/server/rental"
     const rentalServer = async () => {
-        if (name === "" || serverName === "" || (password === "" && useKeyPair) || image === "") {
+        if (name === "" || serverName === "" || (password === "" && !useKeyPair) || image === "") {
             alert("모든 항목을 입력해주세요")
             setIsBtnDisabled(false)
             return
@@ -177,13 +181,13 @@ export default function RentalPage() {
                 start_date   : startDate.toISOString().split("T")[0],
                 end_date     : endDate.toISOString().split("T")[0],
                 image_name   : image,
-                flavor_name  : customFlavor? newFlavorName : flavorData[flavor].name,
-                vcpus        : customFlavor? newVcpu : flavorData[flavor].cpu,
-                ram          : customFlavor? newRam : flavorData[flavor].ram,
-                disk         : customFlavor? newDisk : flavorData[flavor].disk,
+                flavor_name  : customFlavor ? newFlavorName : flavorData[flavor].name,
+                vcpus        : customFlavor ? newVcpu : flavorData[flavor].cpu,
+                ram          : customFlavor ? newRam : flavorData[flavor].ram,
+                disk         : customFlavor ? newDisk : flavorData[flavor].disk,
                 network_name : networkName,
                 subnet_cidr  : subnetCidr,
-                password     : useKeyPair ? "" : password,
+                password     : useKeyPair ? null : password,
                 cloud_init   : cloudInit
             }),
             headers: {
@@ -201,7 +205,7 @@ export default function RentalPage() {
             if (state) {
                 if (useKeyPair) {
                     const blob = new Blob([res.private_key], { type: 'plain/text' });
-                    const file = new File([blob], `${name}.txt`, { type: 'plain/text' });
+                    const file = new File([blob], `${serverName}.pem`, { type: 'plain/text' });
                     downloadFile(file);
                 }
                 alert("대여 완료");

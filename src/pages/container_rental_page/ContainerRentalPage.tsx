@@ -71,9 +71,12 @@ export default function ContainerRentalPage() {
         data.map((item: any) => {
             setNetworkData((prev:ComboBoxItem[]) => [...prev, {
                 value: item.name + ':' + item.subnet_cidr,
-                label: item.name + ' / ' + item.subnet_cidr
+                label: item.name + ' ' + item.subnet_cidr
             }]);
         });
+        try {
+            setNetwork(data[0].name + ':' + data[0].subnet_cidr)
+        } catch (e) {}
     };
     useEffect(() => {
     }, []);
@@ -123,8 +126,8 @@ export default function ContainerRentalPage() {
         if (advancedSetting) {
             networkName = createNetwork ? newNetworkName : network.split(':')[0];
             subnetCidr = createNetwork ? newSubnet : network.split(':')[1];
-            env = envData;
-            cmd = cmdData;
+            env = envData === "" ? null : envData;
+            cmd = cmdData === "" ? null : cmdData;
         }
         handleOpenModal()
         fetch(url, {
@@ -257,7 +260,7 @@ export default function ContainerRentalPage() {
                         <div className="env_help">
                             {SubHead("명령어")}
                             <span className="help_svg_container"
-                                data-tooltip-text="Dockerfile에서 작성하는 CMD와 같은 양식으로 작성해주세요"
+                                data-tooltip-text="명령어A,명령어B의 꼴로 작성해주세요."
                             >
                                 <Help/>
                             </span>
