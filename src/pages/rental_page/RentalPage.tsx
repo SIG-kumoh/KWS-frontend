@@ -248,7 +248,7 @@ export default function RentalPage() {
     const newDiskChange = (target:any) => {
         setNewDisk(target.value)
     }
-    const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"인스턴스명",
+    const newFlavorNameInputProps:InputBoxProps = {type:"text", placeholder:"플레이버 이름",
         value:newFlavorName, change: newFlavorNameChange}
     const newVcpuInputProps:InputBoxProps = {type:"number", placeholder:"1,2,3,...",
         value:newVcpu, change: newVcpuChange}
@@ -266,7 +266,7 @@ export default function RentalPage() {
     const newSubnetChange = (target:any) => {
         setNewSubnet(target.value)
     }
-    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크명 기본값: shared",
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크 이름",
         value:newNetworkName, change: newNetworkNameChange}
     const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"ex) 192.168.233.0/24",
         value:newSubnet, change: newSubnetChange}
@@ -315,11 +315,11 @@ export default function RentalPage() {
 
             {SubHead("Flavor")}
             <input type="checkbox" onChange={({target: {checked}}) => setCustomFlavor(checked)}></input>
-            커스텀 flavor
+            커스텀 Flavor 사용
             <div className="select_box" style={{display: customFlavor?'block':'none'}}>
                 <table>
                     <thead><tr>
-                        <th>프리셋</th>
+                        <th>이름</th>
                         <th>VCPUS(개)</th>
                         <th>RAM(MB)</th>
                         <th>디스크 총계(GB)</th>

@@ -187,7 +187,7 @@ export default function ContainerRentalPage() {
     const newSubnetChange = (target:any) => {
         setNewSubnet(target.value)
     }
-    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크명 기본값: shared",
+    const newNetworkNameInputProps:InputBoxProps = {type:"text", placeholder:"네트워크 이름",
         value:newNetworkName, change: newNetworkNameChange}
     const newSubnetInputProps:InputBoxProps = {type:"text", placeholder:"ex) 192.168.233.0/24",
         value:newSubnet, change: newSubnetChange}
