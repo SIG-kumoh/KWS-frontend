@@ -1,5 +1,9 @@
 .sidebar {
     width: 220px;
+    background-color:#e3dcd2;
+    font-weight: 600;
+    font-size: 18px;
+    color: #100c0d;
 }
 
 .sidebar_panel {
@@ -10,5 +14,6 @@
 
 .sidebar .sidebar_menu .selected {
     font-weight: bold;
+    color:indianred;
 }
 
