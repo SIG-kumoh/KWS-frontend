@@ -20,7 +20,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
       <BrowserRouter>
-          <Header/>
+          <div id="container">
+            <Header/>
             <div className="content_body">
               <IndexContext>
                 <Sidebar/>
@@ -37,6 +38,7 @@ root.render(
                 </div>
               </IndexContext>
             </div>
+          </div>
       </BrowserRouter>
 </React.StrictMode>
 );

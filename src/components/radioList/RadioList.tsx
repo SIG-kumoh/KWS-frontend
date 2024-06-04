@@ -5,7 +5,7 @@ import { RadioListProps, RadioListItem } from "../../config/Config"
 
 export default function RadioList(props: RadioListProps) {
     return (
-        <div className="radio_list">
+        <div className="radio-list">
             {props.items.map((item, index) => (
                 <div key={index}>
                     <label>
@@ -15,7 +15,9 @@ export default function RadioList(props: RadioListProps) {
                             name={props.name}
                             onClick={() => props.change(item.value)}
                         />
-                        {item.value}
+                        <span className={"radio-label"}>
+                            {item.value}
+                        </span>
                     </label>
                 </div>
             ))}

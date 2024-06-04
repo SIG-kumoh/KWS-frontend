@@ -1,7 +1,7 @@
 .date_picker {
-    padding-bottom: 1rem;
 }
 .date_picker .date_picker_input {
-    font-size: 1.3rem;
+    width: 12rem;
+    font-size: 1rem;
     text-align: center;
 }

@@ -1,12 +1,16 @@
 .header {
-  background-color: #eee;
-  border: 1px solid #ccc;
+  background-color: #013328;
+  color: #F7F8FA;
+  height: 50px;
+  display: flex;
+  align-items: center;
 }
 
 .header .header_logo_block {
   display: block;
   height: 36px;
   line-height: 36px;
+  padding-left: 2.5rem;
 }
 
 .header .header_logo_block img {

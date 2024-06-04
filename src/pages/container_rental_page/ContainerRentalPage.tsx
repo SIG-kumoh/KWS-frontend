@@ -210,74 +210,77 @@ export default function ContainerRentalPage() {
                 </div>
             </Modal>
             {PageHeader("컨테이너 생성")}
-            {SubHead("사용자명")}
-            {InputBox(nameInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("사용자명")}
+                {InputBox(nameInputBoxProps)}
 
-            {SubHead("컨테이너명")}
-            {InputBox(serverNameInputBoxProps)}
+                {SubHead("컨테이너명")}
+                {InputBox(serverNameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            {InputBox(pwInputBoxProps)}
+                {SubHead("비밀번호")}
+                {InputBox(pwInputBoxProps)}
 
-            {SubHead("대여 기간")}
-            <div className="date_pick_container">
-                {DatePick(startDatePickProps)}
-                {SubHead("~")}
-                {DatePick(endDatePickProps)}
-            </div>
-
-            {SubHead("이미지")}
-            {InputBox(imageInputBoxProps)}
-
-
-            <div className="advanced_setting_container">
-                <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
-                    {advancedSetting ? ArrowDown() : ArrowUp()}
-                    {SubHead("고급 설정")}
+                {SubHead("대여 기간")}
+                <div className="date_pick_container">
+                    {DatePick(startDatePickProps)}
+                    <h3 style={{margin: "0 1rem"}}>~</h3>
+                    {DatePick(endDatePickProps)}
                 </div>
-                {advancedSetting ?
-                    <div className="advanced_setting_content">
-                        {SubHead("네트워킹")}
 
-                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>
-                        새로운 네트워크에 연결
-                        {createNetwork ?
-                            <div className="new_network_container">
-                                <span className="new_network_name">
-                                    <h4>네트워크 이름</h4>
-                                </span>
-                                {InputBox(newNetworkNameInputProps)}
-                                <span className="new_subnet">
-                                    <h4>서브넷(CIDR)</h4>
-                                </span>
-                                {InputBox(newSubnetInputProps)}
-                            </div> :
-                            ComboBox(networkProps)
-                        }
+                {SubHead("이미지")}
+                {InputBox(imageInputBoxProps)}
 
-                        {SubHead("환경변수")}
-                        {InputBox(envInputBoxProps)}
-                        <div className="env_help">
-                            {SubHead("명령어")}
-                            <span className="help_svg_container"
-                                data-tooltip-text="명령어A,명령어B의 꼴로 작성해주세요."
-                            >
-                                <Help/>
-                            </span>
-                        </div>
-                        {InputBox(cmdInputBoxProps)}
-                    </div> : null
-                }
+
+                <div className="advanced_setting_container">
+                    <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
+                        {advancedSetting ? ArrowDown() : ArrowUp()}
+                        {SubHead("고급 설정")}
+                    </div>
+                    {advancedSetting ?
+                        <div className="advanced_setting_content">
+                            {SubHead("네트워킹")}
+
+                            <div className="check-row">
+                                <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>새로운 네트워크에 연결
+                            </div>
+                            {createNetwork ?
+                                <div className="new_network_container">
+                                    <span className="new_network_name">
+                                        <h4>네트워크 이름</h4>
+                                    </span>
+                                    {InputBox(newNetworkNameInputProps)}
+                                    <span className="new_subnet">
+                                        <h4>서브넷(CIDR)</h4>
+                                    </span>
+                                    {InputBox(newSubnetInputProps)}
+                                </div> :
+                                ComboBox(networkProps)
+                            }
+
+                            {SubHead("환경변수")}
+                            {InputBox(envInputBoxProps)}
+                            <div className="env_help">
+                                {SubHead("명령어")}
+                                <span className="help_svg_container"
+                                    data-tooltip-text="명령어A,명령어B의 꼴로 작성해주세요."
+                                >
+                                    <Help/>
+                                </span>
+                            </div>
+                            {InputBox(cmdInputBoxProps)}
+                        </div> : null
+                    }
+                </div>
+
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {
+                            setIsBtnDisabled(true)
+                            submit(e)
+                        }}>
+                    {isBtnDisabled ? "대여 중" : "대여 신청"}
+                </button>
             </div>
-
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {
-                        setIsBtnDisabled(true)
-                        submit(e)
-                    }}>
-                {isBtnDisabled ? "대여 중" : "대여 신청"}
-            </button>
         </div>
     );
 }

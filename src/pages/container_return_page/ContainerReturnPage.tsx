@@ -100,17 +100,20 @@ export default function ContainerReturnPage() {
                 </div>
             </Modal>
             {PageHeader("컨테이너 삭제")}
-            {SubHead("컨테이너명")}
-            {hasInfo ? SubHead(state) : InputBox(nameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            {InputBox(pwInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("컨테이너명")}
+                {hasInfo ? SubHead(state) : InputBox(nameInputBoxProps)}
 
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {submit(e)}}>
-                {isBtnDisabled ? "반납 신청 중" : "반납 신청"}
-            </button>
+                {SubHead("비밀번호")}
+                {InputBox(pwInputBoxProps)}
+
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {submit(e)}}>
+                    {isBtnDisabled ? "반납 신청 중" : "반납 신청"}
+                </button>
+            </div>
         </div>
     );
 }

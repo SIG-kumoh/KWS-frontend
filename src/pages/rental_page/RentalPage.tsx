@@ -289,102 +289,111 @@ export default function RentalPage() {
                 </div>
             </Modal>
             {PageHeader('서버 대여')}
-            {SubHead("사용자명")}
-            {InputBox(nameInputBoxProps)}
 
-            {SubHead("인스턴스명")}
-            {InputBox(serverNameInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("사용자명")}
+                {InputBox(nameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            <input type="checkbox" onChange={({target: {checked}}) => setUseKeyPair(checked)}></input>
-            키 페어 방식 사용
-            {useKeyPair ? null : InputBox(pwInputBoxProps)}
+                {SubHead("인스턴스명")}
+                {InputBox(serverNameInputBoxProps)}
 
-            {SubHead("대여 기간")}
-            <div className="date_pick_container">
-                {DatePick(startDatePickProps)}
-                {SubHead("~")}
-                {DatePick(endDatePickProps)}
-            </div>
-
-
-            {SubHead("OS 이미지")}
-            {RadioList(radioListProps)}
-            {imageLoadError ? SubHead("서버로부터 응답이 없습니다.") :
-                imageLoading ? <Loading/> : null}
-
-            {SubHead("Flavor")}
-            <input type="checkbox" onChange={({target: {checked}}) => setCustomFlavor(checked)}></input>
-            커스텀 Flavor 사용
-            <div className="select_box" style={{display: customFlavor?'block':'none'}}>
-                <table>
-                    <thead><tr>
-                        <th>이름</th>
-                        <th>VCPUS(개)</th>
-                        <th>RAM(MB)</th>
-                        <th>디스크 총계(GB)</th>
-                    </tr></thead>
-                    <tbody><tr>
-                        <td>{InputBox(newFlavorNameInputProps)}</td>
-                        <td>{InputBox(newVcpuInputProps)}</td>
-                        <td>{InputBox(newRamInputProps)}</td>
-                        <td>{InputBox(newDiskInputProps)}</td>
-                    </tr></tbody>
-                </table>
-            </div>
-            <div className="flavor_select" style={{display: customFlavor?'none':'block'}}>
-                {SelectTable(selectTableProps)}
-            </div>
-            {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
-                flavorLoading ? <Loading/> : null}
-
-            <div className="advanced_setting_container">
-                <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
-                    {advancedSetting ? ArrowDown() : ArrowUp()}
-                    {SubHead("고급 설정")}
+                {SubHead("비밀번호")}
+                <div className="check-row">
+                    <input type="checkbox" onChange={({target: {checked}}) => setUseKeyPair(checked)}></input>
+                    키 페어 방식 사용
                 </div>
-                {advancedSetting ?
-                    <div className="advanced_setting_content">
-                        <div className="cloud_init_container">
-                            {SubHead("Cloud-init")}
-                            <span className="cloud_svg_container"
-                                  data-tooltip-text="가상 머신이 설치되는 동안 cloud-init 스트립트가 실행됩니다 #cloud-config은 빼고 입력하세요"
-                            >
-                                <Help/>
-                            </span>
-                        </div>
-                        <textarea className="cloud_init_textarea"
-                                  onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
-                        {SubHead("네트워킹")}
+                {useKeyPair ? null : InputBox(pwInputBoxProps)}
 
-                        <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>
-                        새로운 네트워크에 연결
-                        {createNetwork ?
-                            <div className="new_network_container">
-                                <span className="new_network_name">
-                                    <h4>네트워크 이름</h4>
-                                </span>
-                                {InputBox(newNetworkNameInputProps)}
-                                <span className="new_subnet">
-                                    <h4>서브넷(CIDR)</h4>
-                                </span>
-                                {InputBox(newSubnetInputProps)}
-                            </div> :
-                            ComboBox(networkProps)
-                        }
+                {SubHead("대여 기간")}
+                <div className="date_pick_container">
+                    {DatePick(startDatePickProps)}
+                    <h3 style={{margin: "0 1rem"}}>~</h3>
+                    {DatePick(endDatePickProps)}
+                </div>
 
-                    </div> : null
-                }
+
+                {SubHead("OS 이미지")}
+                {RadioList(radioListProps)}
+                {imageLoadError ? SubHead("서버로부터 응답이 없습니다.") :
+                    imageLoading ? <Loading/> : null}
+
+                {SubHead("Flavor")}
+                <div className="check-row">
+                    <input type="checkbox" onChange={({target: {checked}}) => setCustomFlavor(checked)}></input>
+                    커스텀 Flavor 사용
+                </div>
+                <div className="select_box" style={{display: customFlavor?'block':'none'}}>
+                    <table>
+                        <thead><tr>
+                            <th>이름</th>
+                            <th>VCPUS(개)</th>
+                            <th>RAM(MB)</th>
+                            <th>디스크 총계(GB)</th>
+                        </tr></thead>
+                        <tbody><tr>
+                            <td>{InputBox(newFlavorNameInputProps)}</td>
+                            <td>{InputBox(newVcpuInputProps)}</td>
+                            <td>{InputBox(newRamInputProps)}</td>
+                            <td>{InputBox(newDiskInputProps)}</td>
+                        </tr></tbody>
+                    </table>
+                </div>
+                <div className="flavor_select" style={{display: customFlavor?'none':'block'}}>
+                    {SelectTable(selectTableProps)}
+                </div>
+                {flavorLoadError ? SubHead("서버로부터 응답이 없습니다.") :
+                    flavorLoading ? <Loading/> : null}
+
+                <div className="advanced_setting_container">
+                    <div className="advanced_setting_header" onClick={() => setAdvancedSetting(!advancedSetting)}>
+                        {advancedSetting ? ArrowDown() : ArrowUp()}
+                        {SubHead("고급 설정")}
+                    </div>
+                    {advancedSetting ?
+                        <div className="advanced_setting_content">
+                            <div className="cloud_init_container">
+                                {SubHead("Cloud-init")}
+                                <span className="cloud_svg_container"
+                                      data-tooltip-text="가상 머신이 설치되는 동안 cloud-init 스트립트가 실행됩니다 #cloud-config은 빼고 입력하세요"
+                                >
+                                    <Help/>
+                                </span>
+                            </div>
+                            <textarea className="cloud_init_textarea"
+                                      onChange={({target: {value}}) => setCloudInitData(value)}></textarea>
+                            {SubHead("네트워킹")}
+
+                            <div className="check-row">
+                                <input type="checkbox" onChange={({target: {checked}}) => setCreateNetwork(checked)}/>
+                                새로운 네트워크에 연결
+                            </div>
+                            {createNetwork ?
+                                <div className="new_network_container">
+                                    <span className="new_network_name">
+                                        <h4>네트워크 이름</h4>
+                                    </span>
+                                    {InputBox(newNetworkNameInputProps)}
+                                    <span className="new_subnet">
+                                        <h4>서브넷(CIDR)</h4>
+                                    </span>
+                                    {InputBox(newSubnetInputProps)}
+                                </div> :
+                                ComboBox(networkProps)
+                            }
+
+                        </div> : null
+                    }
+                </div>
+
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {
+                            setIsBtnDisabled(true)
+                            submit(e)
+                        }}>
+                    {isBtnDisabled ? "대여 중" : "대여 신청"}
+                </button>
             </div>
-
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {
-                        setIsBtnDisabled(true)
-                        submit(e)
-                    }}>
-                {isBtnDisabled ? "대여 중" : "대여 신청"}
-            </button>
         </div>
     );
 }

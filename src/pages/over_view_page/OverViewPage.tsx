@@ -149,72 +149,75 @@ export function OverViewPage() {
     return (
         <div className="overview_page">
             {PageHeader('시스템 현황')}
-            <div className="overview_title">
-                {SubHead("요약")}
-                <span className="title_svg_container"
-                      data-tooltip-text="CPU 정보: Intel Core I7 6700 3.4GHz"
-                >
+            <div className="inner_content">
+                <div className="overview_title">
+                    {SubHead("요약")}
+                    <span className="title_svg_container"
+                          data-tooltip-text="CPU 정보: Intel Core I7 6700 3.4GHz"
+                    >
                     <Help/>
                 </span>
-            </div>
-            {isError ? SubHead("서버로부터 응답이 없습니다.") :
-                isLoading ? <Loading/> :
-                    <>
-                        <h4>[전체 리소스 사용량]</h4>
-                        <div className="summary_container">
-                            {PieChart(makePieChartProp({
-                                numbers: [chartData.total_info.remaining.vcpu, chartData.total_info.using.vcpus],
-                                title: "vcpu",
-                                total: chartData.total_info.limit.vcpu,
-                                color: colorList[0]
-                            }))}
-                            {PieChart(makePieChartProp({
-                                numbers: [chartData.total_info.remaining.ram, chartData.total_info.using.ram],
-                                title: "ram",
-                                total: chartData.total_info.limit.ram,
-                                color: colorList[0]
-                            }))}
-                            {PieChart(makePieChartProp({
-                                numbers: [chartData.total_info.remaining.disk, chartData.total_info.using.disk],
-                                title: "disk",
-                                total: chartData.total_info.limit.disk,
-                                color: colorList[0]
-                            }))}
-                        </div>
-                        <h4>[노드별 리소스 사용량]</h4>
-                        {chartData.node_resources.map((item: any, idx: number) => {
-                            return (
-                                <div key={idx}>
-                                    <p>{item.name} 사용량</p>
-                                    <div className={"summary_container"}>
-                                        {PieChart(makePieChartProp({
-                                            numbers: [item.remaining.vcpus, item.using.vcpus],
-                                            title: "vcpu",
-                                            total: item.limit.vcpu,
-                                            color: colorList[idx + 1]
-                                        }))}
-                                        {PieChart(makePieChartProp({
-                                            numbers: [item.remaining.ram, item.using.ram],
-                                            title: "ram",
-                                            total: item.limit.ram,
-                                            color: colorList[idx + 1]
-                                        }))}
-                                        {PieChart(makePieChartProp({
-                                            numbers: [item.remaining.disk, item.using.disk],
-                                            title: "disk",
-                                            total: item.limit.disk,
-                                            color: colorList[idx + 1]
-                                        }))}
+                </div>
+
+                {isError ? SubHead("서버로부터 응답이 없습니다.") :
+                    isLoading ? <Loading/> :
+                        <>
+                            <h4>[전체 리소스 사용량]</h4>
+                            <div className="summary_container">
+                                {PieChart(makePieChartProp({
+                                    numbers: [chartData.total_info.remaining.vcpu, chartData.total_info.using.vcpus],
+                                    title: "vcpu",
+                                    total: chartData.total_info.limit.vcpu,
+                                    color: colorList[0]
+                                }))}
+                                {PieChart(makePieChartProp({
+                                    numbers: [chartData.total_info.remaining.ram, chartData.total_info.using.ram],
+                                    title: "ram",
+                                    total: chartData.total_info.limit.ram,
+                                    color: colorList[0]
+                                }))}
+                                {PieChart(makePieChartProp({
+                                    numbers: [chartData.total_info.remaining.disk, chartData.total_info.using.disk],
+                                    title: "disk",
+                                    total: chartData.total_info.limit.disk,
+                                    color: colorList[0]
+                                }))}
+                            </div>
+                            <h4>[노드별 리소스 사용량]</h4>
+                            {chartData.node_resources.map((item: any, idx: number) => {
+                                return (
+                                    <div key={idx}>
+                                        <p>{item.name} 사용량</p>
+                                        <div className={"summary_container"}>
+                                            {PieChart(makePieChartProp({
+                                                numbers: [item.remaining.vcpus, item.using.vcpus],
+                                                title: "vcpu",
+                                                total: item.limit.vcpu,
+                                                color: colorList[idx + 1]
+                                            }))}
+                                            {PieChart(makePieChartProp({
+                                                numbers: [item.remaining.ram, item.using.ram],
+                                                title: "ram",
+                                                total: item.limit.ram,
+                                                color: colorList[idx + 1]
+                                            }))}
+                                            {PieChart(makePieChartProp({
+                                                numbers: [item.remaining.disk, item.using.disk],
+                                                title: "disk",
+                                                total: item.limit.disk,
+                                                color: colorList[idx + 1]
+                                            }))}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                        })}
-                    </>
-            }
-            {SubHead("서버 대여 현황")}
-            {Table(getServerTableProp(serverData, navigate))}
-            {SubHead("컨테이너 대여 현황")}
-            {Table(getContainerTableProp(containerData, navigate))}
+                                )
+                            })}
+                        </>
+                }
+                {SubHead("서버 대여 현황")}
+                {Table(getServerTableProp(serverData, navigate))}
+                {SubHead("컨테이너 대여 현황")}
+                {Table(getContainerTableProp(containerData, navigate))}
+            </div>
         </div>
     )
 }

@@ -104,23 +104,26 @@ export default function ContainerExtensionPage() {
                     <Loading/>
                 </div>
             </Modal>
+
             {PageHeader(sidebarPanel[selected].name)}
-            {SubHead("컨테이너명")}
-            {hasInfo ? SubHead(state) : InputBox(containerNameInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("컨테이너명")}
+                {hasInfo ? SubHead(state) : InputBox(containerNameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            {InputBox(pwInputBoxProps)}
+                {SubHead("비밀번호")}
+                {InputBox(pwInputBoxProps)}
 
-            {SubHead("연장 기간")}
-            {DatePick(endDatePickProps)}
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {
-                        setIsBtnDisabled(true)
-                        submit(e)
-                    }}>
-                {isBtnDisabled ? "연장 신청 중" : "연장 신청"}
-            </button>
+                {SubHead("연장 기간")}
+                {DatePick(endDatePickProps)}
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {
+                            setIsBtnDisabled(true)
+                            submit(e)
+                        }}>
+                    {isBtnDisabled ? "연장 신청 중" : "연장 신청"}
+                </button>
+            </div>
         </div>
     );
 }

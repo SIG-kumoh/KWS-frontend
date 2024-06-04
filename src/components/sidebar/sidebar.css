@@ -5,8 +5,10 @@
 .sidebar_panel {
     text-align: center;
     padding: 1.2em 1.2em;
+    list-style-type : none
 }
 
 .sidebar .sidebar_menu .selected {
     font-weight: bold;
 }
+

@@ -8,7 +8,7 @@
 }
 
 .overview_page .overview_title .title_svg_container {
-    margin-left: 1rem;
+    margin-left: 0.5rem;
 }
 
 .overview_page .h4 {
@@ -16,8 +16,9 @@
 }
 
 .summary_container {
-    display: flex;
-    width: 100%;
+    display: inline-flex;
     justify-content: start;
-    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #CBC6C3;
+    margin-bottom: 1rem;
 }

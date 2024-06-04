@@ -119,26 +119,32 @@ export default function ExtensionPage() {
                 </div>
             </Modal>
             {PageHeader('서버 연장')}
-            {SubHead("인스턴스명")}
-            {hasInfo ? SubHead(state.server_name) : InputBox(serverNameInputBoxProps)}
 
-            {SubHead("IP")}
-            {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("인스턴스명")}
+                {hasInfo ? SubHead(state.server_name) : InputBox(serverNameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용
-            {InputBox(pwInputBoxProps)}
+                {SubHead("IP")}
+                {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
 
-            {SubHead("연장 기간")}
-            {DatePick(endDatePickProps)}
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {
-                        setIsBtnDisabled(true)
-                        submit(e)
-                    }}>
-                {isBtnDisabled ? "연장 신청 중" : "연장 신청"}
-            </button>
+                {SubHead("비밀번호")}
+
+                <div className="check-row">
+                    <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용
+                </div>
+                {InputBox(pwInputBoxProps)}
+
+                {SubHead("연장 기간")}
+                {DatePick(endDatePickProps)}
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {
+                            setIsBtnDisabled(true)
+                            submit(e)
+                        }}>
+                    {isBtnDisabled ? "연장 신청 중" : "연장 신청"}
+                </button>
+            </div>
         </div>
     );
 }

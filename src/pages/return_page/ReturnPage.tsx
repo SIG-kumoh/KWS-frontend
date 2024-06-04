@@ -115,21 +115,26 @@ export default function ReturnPage() {
                 </div>
             </Modal>
             {PageHeader("서버 반납")}
-            {SubHead("인스턴스명")}
-            {hasInfo ? SubHead(state.server_name) : InputBox(nameInputBoxProps)}
 
-            {SubHead("IP")}
-            {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
+            <div className="inner_content">
+                {SubHead("인스턴스명")}
+                {hasInfo ? SubHead(state.server_name) : InputBox(nameInputBoxProps)}
 
-            {SubHead("비밀번호")}
-            <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용
-            {InputBox(pwInputBoxProps)}
+                {SubHead("IP")}
+                {hasInfo ? SubHead(state.host_ip) : InputBox(ipInputBoxProps)}
 
-            <button className="submit_button"
-                    disabled={isBtnDisabled}
-                    onClick={(e) => {submit(e)}}>
-                {isBtnDisabled ? "반납 신청 중" : "반납 신청"}
-            </button>
+                {SubHead("비밀번호")}
+                <div className="check-row">
+                    <input type="checkbox" onChange={({ target: { checked } }) => setUseKeyPair(checked)} />키 페어 방식 사용
+                </div>
+                {InputBox(pwInputBoxProps)}
+
+                <button className="submit_button"
+                        disabled={isBtnDisabled}
+                        onClick={(e) => {submit(e)}}>
+                    {isBtnDisabled ? "반납 신청 중" : "반납 신청"}
+                </button>
+            </div>
         </div>
     );
 }
